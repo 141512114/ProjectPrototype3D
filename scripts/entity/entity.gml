@@ -142,7 +142,7 @@ function Entity() : Model() constructor {
 		if (checkEntityCollision(__dx, 0) == true) then __len_x = 0;
 		if (checkEntityCollision(0, __dy) == true) then __len_y = 0;
 
-		setEntityPosition(__parent_pos[0]+__len_x, __parent_pos[1]+__len_y);
+		setEntityPosition(__parent_pos[0]+__len_x, __parent_pos[1]+__len_y, 0);
 	}
 	
 	/// @function checkEntityCollision(__dx, __dy);
