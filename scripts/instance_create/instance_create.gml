@@ -4,7 +4,7 @@
 /// @param {real} __xx
 /// @param {real} __yy
 /// @param {real} __zz
-/// @param {real} __object
+/// @param {Asset.GMObject|any} __object
 /// @param {string} __on_layer
 /// @param {real} __w_depth
 

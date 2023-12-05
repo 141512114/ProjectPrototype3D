@@ -1,11 +1,13 @@
 /// @function model_choose_variant(variant, tex_map);
 
-/// @param variant
-/// @param {array} texture_map
-/// @param {array} size
+/// @param {real|any} __variant
+/// @param {array} __tex_map
+/// @param {array} __size
 
-function model_choose_variant(__variant = SQUARE, __tex_map, __size = [DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE]) {
-	if (is_undefined(__tex_map)) then return;
+/// @returns {Id.VertexBuffer}
+
+function model_choose_variant(__variant = SQUARE, __tex_map = [], __size = [DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE]) {
+	if (is_undefined(__tex_map)) then return -1;
 	
 	// Check which variant is chosen
 	switch (__variant) {

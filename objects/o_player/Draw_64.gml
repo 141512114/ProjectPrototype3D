@@ -20,9 +20,9 @@ var __x_off = 20, __y_off = 20, __to_draw = [
 	[__debug_colors._player, ( "Y Position: " + string(y) )]
 ];
 
-for(var i = 0; i < array_length(__to_draw); i++) {
-	draw_set_color(__to_draw[i][0]);
-	draw_text(__x_off, __y_off+__y_off*i, __to_draw[i][1]);
+for(var __i = 0; __i < array_length(__to_draw); __i++) {
+	draw_set_color(__to_draw[__i][0]);
+	draw_text(__x_off, __y_off+__y_off*__i, __to_draw[__i][1]);
 	draw_set_color(c_white);
 }
 

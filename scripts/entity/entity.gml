@@ -24,7 +24,7 @@ function Entity() : Model() constructor {
 	/// @function setHealthPoints();
 	/// @description Set health points of the entity
 	
-	/// @param {real} hp
+	/// @param {real} __hp
 	
 	setHealthPoints = function(__hp) {
 		_health_points = __hp;
@@ -33,7 +33,7 @@ function Entity() : Model() constructor {
 	/// @function setMaxHealthPoints();
 	/// @description Set the maximum health points of the entity
 	
-	/// @param {real} max_hp
+	/// @param {real} __max_hp
 	
 	setMaxHealthPoints = function(__max_hp) {
 		_max_health_points = __max_hp;
@@ -44,15 +44,15 @@ function Entity() : Model() constructor {
 	
 	getEntityPosition = function() {
 		var __parent = getParentId();
-		return (is_undefined(__parent)) ? 0 : [__parent.x, __parent.y, __parent.z];
+		return (is_undefined(__parent)) ? [] : [__parent.x, __parent.y, __parent.z];
 	}
 	
 	/// @function setEntityPosition(x, y, z);
 	/// @description Set position properties of entity
 	
-	/// @param {real} x
-	/// @param {real} y
-	/// @param {real} z
+	/// @param {real} __x
+	/// @param {real} __y
+	/// @param {real} __z
 	
 	setEntityPosition = function(__x = 0, __y = 0, __z = 0) {
 		var __parent = getParentId();
@@ -69,10 +69,10 @@ function Entity() : Model() constructor {
 		return _move_speed;
 	}
 	
-	/// @function setMoveSpeed();
+	/// @function setMoveSpeed(move_speed);
 	/// @description Set movement speed of the entity
 	
-	/// @param {real} speed
+	/// @param {real} __move_speed
 	
 	setMoveSpeed = function(__move_speed) {
 		_move_speed = __move_speed;
@@ -85,7 +85,7 @@ function Entity() : Model() constructor {
 		return _look_dir;
 	}
 	
-	/// @function setEntityViewDirection();
+	/// @function setEntityViewDirection(look_dir);
 	/// @description Set view direction of entity
 	
 	/// @param {real} __look_dir
@@ -95,11 +95,11 @@ function Entity() : Model() constructor {
 		_look_dir = __look_dir;
 	}
 	
-	/// @function entityMoveSet(__h_move, __v_move);
+	/// @function entityMoveSet(horizontal, vertical);
 	/// @description Calculate entity moves
 	
-	/// @param {real} horizontal
-	/// @param {real} vertical
+	/// @param {real} __h_move
+	/// @param {real} __v_move
 	
 	entityMoveSet = function(__h_move, __v_move) {
 		var __s_h_move = sign(__h_move), __s_v_move = sign(__v_move);
@@ -124,9 +124,9 @@ function Entity() : Model() constructor {
 	/// @function manipulateEntityPosition(__dx, __dy, __len);
 	/// @description Manipulate the position of an entity (on x/y axes)
 	
-	/// @param {real} dx
-	/// @param {real} dy
-	/// @param {real} len
+	/// @param {real} __dx
+	/// @param {real} __dy
+	/// @param {real} __len
 	
 	manipulateEntityPosition = function(__dx, __dy, __len = 0) {
 		var __parent_pos = getEntityPosition();
@@ -148,8 +148,8 @@ function Entity() : Model() constructor {
 	/// @function checkEntityCollision(__dx, __dy);
 	/// @description Check for any collision with any solid object
 	
-	/// @param {real} dx
-	/// @param {real} dy
+	/// @param {real} __dx
+	/// @param {real} __dy
 	
 	checkEntityCollision = function(__dx = 0, __dy = 0) {
 		var __parent = getParentId();

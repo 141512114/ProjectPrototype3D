@@ -12,7 +12,7 @@ matrix_set(matrix_world, matrix_build(
 if (!is_undefined(entity_class.getModelData())) {
 	var __model = entity_class.getModelData();
 	var __tex = entity_class.getTexture();
-	
+	// feather ignore once GM1041
 	vertex_submit(__model, pr_trianglelist, __tex);
 }
 matrix_set(matrix_world, matrix_build_identity());

@@ -5,10 +5,12 @@ z = 0;
 
 // Create entity class
 entity_class = new Entity();
-entity_class.setParentId(id);
+// feather ignore all
+entity_class.setParentId(self);
 entity_class.clearVertexBuffers();
 entity_class.setModelData(SPRITE);
 entity_class.setPosition(DEFAULT_CUBE_SIZE/2, DEFAULT_CUBE_SIZE/2);
+// feather enable all
 
 // Entity settings
 look_at = o_player;

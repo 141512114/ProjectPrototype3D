@@ -1,15 +1,15 @@
 /// @function vertex_create_sprite(x, y, z, size, color, alpha);
 /// @description Create a plane model and return it as a vertex buffer
 
-/// @param {real} x
-/// @param {real} y
-/// @param {real} z
-/// @param {array} size
-/// @param {array} texture_map
-/// @param {real} color
-/// @param {real} alpha
+/// @param {real} __xx
+/// @param {real} __yy
+/// @param {real} __zz
+/// @param {array} __size
+/// @param {array} __tex_map
+/// @param {real} __color
+/// @param {real} __alpha
 
-function vertex_create_sprite(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CUBE_SIZE, 0, DEFAULT_CUBE_SIZE], __tex_map, __color = c_white, __alpha = 1) {
+function vertex_create_sprite(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CUBE_SIZE, 0, DEFAULT_CUBE_SIZE], __tex_map = [], __color = c_white, __alpha = 1) {
 	if (is_undefined(__tex_map)) then return;
 	
 	// Create texture map info (UV data)
@@ -40,15 +40,15 @@ function vertex_create_sprite(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CU
 /// @function vertex_create_crossed_sprite(x, y, z, size, color, alpha);
 /// @description Create a crossed plane model and return it as a vertex buffer
 
-/// @param {real} x
-/// @param {real} y
-/// @param {real} z
-/// @param {array} size
-/// @param {array} texture_map
-/// @param {real} color
-/// @param {real} alpha
+/// @param {real} __xx
+/// @param {real} __yy
+/// @param {real} __zz
+/// @param {array} __size
+/// @param {array} __tex_map
+/// @param {real} __color
+/// @param {real} __alpha
 
-function vertex_create_crossed_sprite(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CUBE_SIZE, 0, DEFAULT_CUBE_SIZE], __tex_map, __color = c_white, __alpha = 1) {
+function vertex_create_crossed_sprite(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CUBE_SIZE, 0, DEFAULT_CUBE_SIZE], __tex_map = [], __color = c_white, __alpha = 1) {
 	if (is_undefined(__tex_map)) then return;
 	
 	// Create texture map info (UV data)
@@ -93,15 +93,15 @@ function vertex_create_crossed_sprite(__xx = 0, __yy = 0, __zz = 0, __size = [DE
 /// @function vertex_create_cube(x, y, z, size, color, alpha);
 /// @description Create a cube model and return it as a vertex buffer
 
-/// @param {real} x
-/// @param {real} y
-/// @param {real} z
-/// @param {array} size
-/// @param {array} texture_map
-/// @param {real} color
-/// @param {real} alpha
+/// @param {real} __xx
+/// @param {real} __yy
+/// @param {real} __zz
+/// @param {array} __size
+/// @param {array} __tex_map
+/// @param {real} __color
+/// @param {real} __alpha
 
-function vertex_create_cube(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE], __tex_map, __color = c_white, __alpha = 1) {
+function vertex_create_cube(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE], __tex_map = [], __color = c_white, __alpha = 1) {
 	if (is_undefined(__tex_map)) then return;
 	
 	// Assign uv data to every face of the square
