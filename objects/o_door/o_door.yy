@@ -29,11 +29,14 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [],
-  "solid": false,
+  "solid": true,
   "spriteId": {
     "name": "spr_door_placeholder",
     "path": "sprites/spr_door_placeholder/spr_door_placeholder.yy",
   },
-  "spriteMaskId": null,
+  "spriteMaskId": {
+    "name": "spr_collision",
+    "path": "sprites/spr_collision/spr_collision.yy",
+  },
   "visible": false,
 }

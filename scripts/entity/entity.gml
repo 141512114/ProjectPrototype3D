@@ -57,9 +57,9 @@ function Entity() : Model() constructor {
 	setEntityPosition = function(__x = 0, __y = 0, __z = 0) {
 		var __parent = getParentId();
 		if (is_undefined(__parent) || !instance_exists(__parent)) then return;
-		__parent.x = __x;
-		__parent.y = __y;
-		__parent.z = __z;
+		__parent.x = round(__x);
+		__parent.y = round(__y);
+		__parent.z = round(__z);
 	}
 	
 	/// @function getMoveSpeed();
@@ -134,31 +134,37 @@ function Entity() : Model() constructor {
 		// Fix diagonal movement (speed fix)
 		var __dir = point_direction(0, 0, __dx, __dy);
 		var __len_x = 0, __len_y = 0;
-		__len_x = lengthdir_x(__len, __dir);
-		__len_y = lengthdir_y(__len, __dir);
 		
 		// Check if there is a solid object in front of the player
 		// And if so: hinder him on moving through it
-		if (checkEntityCollision(__dx, 0) == true) then __len_x = 0;
-		if (checkEntityCollision(0, __dy) == true) then __len_y = 0;
+		if (checkEntityCollision(__dx, 0, __len) == false) then __len_x = lengthdir_x(__len, __dir);
+		if (checkEntityCollision(0, __dy, __len) == false) then __len_y = lengthdir_y(__len, __dir);
 
 		setEntityPosition(__parent_pos[0]+__len_x, __parent_pos[1]+__len_y, 0);
 	}
 	
-	/// @function checkEntityCollision(__dx, __dy);
+	/// @function checkEntityCollision(__dx, __dy, __len);
 	/// @description Check for any collision with any solid object
 	
 	/// @param {real} __dx
 	/// @param {real} __dy
+	/// @param {real} __len
 	
-	checkEntityCollision = function(__dx = 0, __dy = 0) {
+	checkEntityCollision = function(__dx, __dy, __len = 0) {
 		var __parent = getParentId();
 		if (is_undefined(__parent) || !instance_exists(__parent)) then return;
+		
+		var __dir = point_direction(0, 0, __dx, __dy);
+		var __len_x = 0, __len_y = 0;
+		__len_x = round(lengthdir_x(__len, __dir));
+		__len_y = round(lengthdir_y(__len, __dir));
+		
 		with (__parent) {
-			if (place_meeting(x+__dx, y+__dy, par_solid)) {
-				while (!place_meeting(x+sign(__dx), y+sign(__dy), par_solid)) {
-					x += sign(__dx);
-					y += sign(__dy);
+			if (place_meeting(x+__len_x, y+__len_y, par_solid)) {
+				while (!place_meeting(x+sign(__len_x), y+sign(__len_y), par_solid)) {
+					// Fix diagonal movement (speed fix)
+					x += sign(__len_x);
+					y += sign(__len_y);
 				}
 				return true;
 			}

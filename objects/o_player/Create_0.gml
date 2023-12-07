@@ -5,7 +5,7 @@ event_inherited();
 // Remove model
 entity_class.clearVertexBuffers();
 entity_class.setModelData();
-// feather ignore once GM1019
+// @feather ignore once GM1019
 entity_class.setTexture(undefined);
 entity_class.setTetxtureMap();
 

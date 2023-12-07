@@ -44,7 +44,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.8.2.108",
+    "IDEVersion": "2023.11.0.121",
   },
   "resources": [
     {"id":{"name":"spr_six_sides_test","path":"sprites/spr_six_sides_test/spr_six_sides_test.yy",},},
@@ -73,6 +73,7 @@
     {"id":{"name":"o_software_control","path":"objects/o_software_control/o_software_control.yy",},},
     {"id":{"name":"vertex_create_shapes","path":"scripts/vertex_create_shapes/vertex_create_shapes.yy",},},
     {"id":{"name":"spr_test_door","path":"sprites/spr_test_door/spr_test_door.yy",},},
+    {"id":{"name":"spr_player_collision","path":"sprites/spr_player_collision/spr_player_collision.yy",},},
     {"id":{"name":"o_test_enemy","path":"objects/o_test_enemy/o_test_enemy.yy",},},
     {"id":{"name":"spr_enemy_placeholder","path":"sprites/spr_enemy_placeholder/spr_enemy_placeholder.yy",},},
     {"id":{"name":"o_door","path":"objects/o_door/o_door.yy",},},
