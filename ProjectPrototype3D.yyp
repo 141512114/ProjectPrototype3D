@@ -48,6 +48,7 @@
     "IDEVersion": "2023.11.0.121",
   },
   "resources": [
+    {"id":{"name":"spr_flower","path":"sprites/spr_flower/spr_flower.yy",},},
     {"id":{"name":"par_object","path":"objects/par_object/par_object.yy",},},
     {"id":{"name":"model","path":"scripts/model/model.yy",},},
     {"id":{"name":"rm_testroom","path":"rooms/rm_testroom/rm_testroom.yy",},},

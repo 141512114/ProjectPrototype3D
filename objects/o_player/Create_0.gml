@@ -10,7 +10,7 @@ entity_class.setTexture(undefined);
 entity_class.setTetxtureMap();
 
 // Settings
-sensitivity = 13;
+sensitivity = 17;
 
 look_at = -1;
 

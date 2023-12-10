@@ -31,6 +31,7 @@
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
   "ResourceOrderSettings": [
+    {"name":"spr_flower","order":3,"path":"sprites/spr_flower/spr_flower.yy",},
     {"name":"par_object","order":1,"path":"objects/par_object/par_object.yy",},
     {"name":"model","order":1,"path":"scripts/model/model.yy",},
     {"name":"rm_testroom","order":2,"path":"rooms/rm_testroom/rm_testroom.yy",},

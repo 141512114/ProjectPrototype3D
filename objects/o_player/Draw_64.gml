@@ -16,6 +16,10 @@ var __debug_colors = {
 var __x_off = 20, __y_off = 20, __to_draw = [
 	[__debug_colors._player, ( "HP points: " + string(entity_class.getHealthPoints()) + " / " + string(entity_class.getMaxHealthPoints()) )],
 	[__debug_colors._player, ( "Look direction (Angle): " + string(__look_dir) )],
+	[__debug_colors._player, ( "Image angle: " + string(image_angle) )],
+	[__debug_colors._player, ( "X Rotation: " + string(entity_class.getRotation()[0]) )],
+	[__debug_colors._player, ( "Y Rotation: " + string(entity_class.getRotation()[1]) )],
+	[__debug_colors._player, ( "Z Rotation: " + string(entity_class.getRotation()[2]) )],
 	[__debug_colors._player, ( "X Position: " + string(x) )],
 	[__debug_colors._player, ( "Y Position: " + string(y) )]
 ];
