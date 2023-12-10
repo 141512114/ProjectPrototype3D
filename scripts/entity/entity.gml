@@ -160,8 +160,8 @@ function Entity() : Model() constructor {
 		__len_y = round(lengthdir_y(__len, __dir));
 		
 		with (__parent) {
-			if (place_meeting(x+__len_x, y+__len_y, par_solid)) {
-				while (!place_meeting(x+sign(__len_x), y+sign(__len_y), par_solid)) {
+			if (place_meeting(x+__len_x, y+__len_y, [par_solid, par_entity])) {
+				while (!place_meeting(x+sign(__len_x), y+sign(__len_y), [par_solid, par_entity])) {
 					// Fix diagonal movement (speed fix)
 					x += sign(__len_x);
 					y += sign(__len_y);

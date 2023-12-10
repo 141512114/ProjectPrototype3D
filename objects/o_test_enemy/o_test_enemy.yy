@@ -33,5 +33,5 @@
     "path": "sprites/spr_enemy_placeholder/spr_enemy_placeholder.yy",
   },
   "spriteMaskId": null,
-  "visible": false,
+  "visible": true,
 }
