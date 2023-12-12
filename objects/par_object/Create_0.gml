@@ -1,5 +1,8 @@
 /// @description Initialize 3d-stuff
 
+image_speed = 0;
+image_index = 0;
+
 // Z axis
 z = 0;
 

@@ -2,26 +2,26 @@
 /// @description Model class
 
 function Model() constructor {
-	_parent				= undefined;
+	self._parent			= undefined;
 	
-	_model_data			= undefined;
-	_model_texture		= undefined;
-	_model_texture_map	= undefined;
+	self._model_data		= undefined;
+	self._model_texture		= undefined;
+	self._model_texture_map	= undefined;
 	
-	_x = 0;
-	_y = 0;
-	_z = 0;
+	self._x = 0;
+	self._y = 0;
+	self._z = 0;
 	
-	_size = [DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE];
-	_rotation = [0, 0, 0];
-	_transform = [1, 1, 1];
+	self._size		= [DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE];
+	self._rotation	= [0, 0, 0];
+	self._transform	= [1, 1, 1];
 	
 	/// @function getParentId();
 	/// @description Get parent id of ingame model. The parent is the host of this model class
+	/// @returns {Any|Undefined}
 	
 	getParentId = function() {
-		if (_parent == undefined) return;
-		return _parent.id;
+		return self._parent;
 	}
 	
 	/// @function setParentId(id);
@@ -30,26 +30,24 @@ function Model() constructor {
 	/// @param {Asset.GMObject|any} __parent
 	
 	setParentId = function(__parent) {
-		_parent = __parent;
+		self._parent = __parent;
 	}
 	
 	/// @function getModelData();
 	/// @description Get size of ingame model
-	
-	/// @returns {any}
+	/// @returns {Id.VertexBuffer|undefined}
 	
 	getModelData = function() {
-		if (_model_data == undefined) return;
-		return _model_data;
+		return self._model_data;
 	}
 	
 	/// @function setModelData(model);
 	/// @description Set size of ingame model
 	
-	/// @param {real|any} __model_data
+	/// @param {real|Id.VertexBuffer} __model_data
 	
 	setModelData = function(__model_data = undefined) {
-		_model_data = (is_undefined(__model_data)) ? undefined : model_choose_variant(__model_data, _model_texture_map, _size);
+		self._model_data = (is_undefined(__model_data)) ? undefined : model_choose_variant(__model_data, _model_texture_map, _size);
 	}
 	
 	/// @function removeJunkFaces();
@@ -57,16 +55,14 @@ function Model() constructor {
 	
 	removeJunkFaces = function() {
 		var __parent = getParentId();
-		if (is_undefined(__parent) || !instance_exists(__parent)) return;
-		// @feather ignore once GM1041
-		with (__parent) { other.setModelData(vertex_remove_face(other.getModelData())); }
+		setModelData(vertex_remove_face(__parent, getModelData()));
 	}
 	
 	/// @function getPosition();
 	/// @description Get position properties of ingame model
 	
 	getPosition = function() {
-		return [_x, _y, _z];
+		return [self._x, self._y, self._z];
 	}
 	
 	/// @function setPosition(x, y, z);
@@ -77,16 +73,17 @@ function Model() constructor {
 	/// @param {real} __z
 	
 	setPosition = function(__x = 0, __y = 0, __z = 0) {
-		_x = __x;
-		_y = __y;
-		_z = __z;
+		self._x = __x;
+		self._y = __y;
+		self._z = __z;
 	}
 	
 	/// @function getSize();
 	/// @description Get size of ingame model
+	/// @returns {Array<Real>}
 	
 	getSize = function() {
-		return _size;
+		return self._size;
 	}
 	
 	/// @function setSize(width, length, height);
@@ -97,7 +94,7 @@ function Model() constructor {
 	/// @param {real} __z_size
 	
 	setSize = function(__x_size, __y_size, __z_size) {
-		_size = [__x_size, __y_size, __z_size];
+		self._size = [__x_size, __y_size, __z_size];
 	}
 	
 	/// @function applySize();
@@ -147,9 +144,10 @@ function Model() constructor {
 	
 	/// @function getTransform();
 	/// @description Get transform properties of ingame model
+	/// @returns {Array<Real>}
 	
 	getTransform = function() {
-		return _transform;
+		return self._transform;
 	}
 	
 	/// @function setTransform(x, y, z);
@@ -160,14 +158,15 @@ function Model() constructor {
 	/// @param {real} __z_transform
 	
 	setTransform = function(__x_transform, __y_transform, __z_transform) {
-		_transform = [__x_transform, __y_transform, __z_transform];
+		self._transform = [__x_transform, __y_transform, __z_transform];
 	}
 	
 	/// @function getRotation();
 	/// @description Get rotation properties of ingame model
+	/// @returns {Array<Real>}
 	
 	getRotation = function() {
-		return _rotation;
+		return self._rotation;
 	}
 	
 	/// @function setRotation(x, y, z);
@@ -178,34 +177,35 @@ function Model() constructor {
 	/// @param {real} __z_rotation
 	
 	setRotation = function(__x_rotation, __y_rotation, __z_rotation) {
-		_rotation = [__x_rotation, __y_rotation, __z_rotation];
+		self._rotation = [__x_rotation, __y_rotation, __z_rotation];
 	}
 	
 	/// @function getTextureMap();
 	/// @description Get texture map of ingame model
+	/// @returns {Array<Array<Real>>}
 	
 	getTextureMap = function() {
-		return _model_texture_map;
+		return self._model_texture_map;
 	}
 	
 	/// @function setTetxtureMap(tex_map);
 	/// @description Set texture map of ingame model
 	
-	/// @param {array} __tex_map
+	/// @param {Array<Array<Real>>} __tex_map
 	
 	setTetxtureMap = function(__tex_map = []) {
-		_model_texture_map = __tex_map;
+		self._model_texture_map = __tex_map;
 	}
 	
 	/// @function generateTetxtureMap();
 	/// @description Generate texture map of ingame model
 	
 	generateTetxtureMap = function() {
-		if (!is_undefined(_model_texture) && sprite_exists(_model_texture)) {
-			var __subimg_count = sprite_get_number(_model_texture);
+		if (!is_undefined(self._model_texture) && sprite_exists(self._model_texture)) {
+			var __subimg_count = sprite_get_number(self._model_texture);
 			
 			for(var __i = 0; __i < __subimg_count; __i++) {
-				_model_texture_map[__i] = sprite_get_uvs(_model_texture, __i);
+				self._model_texture_map[__i] = sprite_get_uvs(self._model_texture, __i);
 			}
 		}
 	}
@@ -302,7 +302,7 @@ function Model() constructor {
 	/// @returns {real|Pointer.Texture}
 	
 	getTexture = function() {
-		return (is_undefined(_model_texture)) ? sprite_get_texture(-1, 0) : sprite_get_texture(_model_texture, 0);
+		return (is_undefined(self._model_texture)) ? sprite_get_texture(-1, 0) : sprite_get_texture(self._model_texture, 0);
 	}
 	
 	/// @function setTexture(texture);
@@ -311,9 +311,10 @@ function Model() constructor {
 	/// @param {Asset.GMSprite|any} __tex
 	
 	setTexture = function(__tex = spr_none) {
-		_model_texture = __tex;
+		self._model_texture = __tex;
 		generateTetxtureMap();
-		if (!is_undefined(_model_data)) then applyTextureMap();
+		if (is_undefined(getModelData())) return;
+		applyTextureMap();
 	}
 	
 	// This has to be set here, otherwise it will cause an error because of the missing existance of the function
@@ -324,6 +325,7 @@ function Model() constructor {
 	
 	clearVertexBuffers = function() {
 		var __model = getModelData();
-		if (!is_undefined(__model)) then vertex_delete_buffer(__model);
+		if (is_undefined(__model)) return;
+		vertex_delete_buffer(__model);
 	}
 }
