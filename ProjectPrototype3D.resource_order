@@ -39,6 +39,7 @@
     {"name":"macros","order":3,"path":"scripts/macros/macros.yy",},
     {"name":"spr_flower_placeholder","order":1,"path":"sprites/spr_flower_placeholder/spr_flower_placeholder.yy",},
     {"name":"instance_create","order":1,"path":"scripts/instance_create/instance_create.yy",},
+    {"name":"shd_simple_passthrough","order":1,"path":"shaders/shd_simple_passthrough/shd_simple_passthrough.yy",},
     {"name":"o_wall","order":4,"path":"objects/o_wall/o_wall.yy",},
     {"name":"par_entity","order":2,"path":"objects/par_entity/par_entity.yy",},
     {"name":"spr_test_door","order":2,"path":"sprites/spr_test_door/spr_test_door.yy",},

@@ -61,6 +61,7 @@
     {"id":{"name":"macros","path":"scripts/macros/macros.yy",},},
     {"id":{"name":"spr_flower_placeholder","path":"sprites/spr_flower_placeholder/spr_flower_placeholder.yy",},},
     {"id":{"name":"instance_create","path":"scripts/instance_create/instance_create.yy",},},
+    {"id":{"name":"shd_simple_passthrough","path":"shaders/shd_simple_passthrough/shd_simple_passthrough.yy",},},
     {"id":{"name":"fn_default","path":"fonts/fn_default/fn_default.yy",},},
     {"id":{"name":"o_wall","path":"objects/o_wall/o_wall.yy",},},
     {"id":{"name":"o_test_enemy","path":"objects/o_test_enemy/o_test_enemy.yy",},},
