@@ -137,8 +137,8 @@ function Entity() : Model() constructor {
 		
 		// Check if there is a solid object in front of the player
 		// And if so: hinder him on moving through it
-		if (checkEntityCollision(__dx, 0, __len) == false) then __len_x = lengthdir_x(__len, __dir);
-		if (checkEntityCollision(0, __dy, __len) == false) then __len_y = lengthdir_y(__len, __dir);
+		if (checkEntityCollision(__dx, 0, __len) == false) then __len_x = round(lengthdir_x(__len, __dir));
+		if (checkEntityCollision(0, __dy, __len) == false) then __len_y = round(lengthdir_y(__len, __dir));
 
 		setEntityPosition(__parent_pos[0]+__len_x, __parent_pos[1]+__len_y, 0);
 	}
@@ -152,7 +152,7 @@ function Entity() : Model() constructor {
 	
 	checkEntityCollision = function(__dx, __dy, __len = 0) {
 		var __parent = getParentId();
-		if (is_undefined(__parent) || !instance_exists(__parent)) then return;
+		if (is_undefined(__parent) || !instance_exists(__parent)) then return false;
 		
 		var __dir = point_direction(0, 0, __dx, __dy);
 		var __len_x = 0, __len_y = 0;
