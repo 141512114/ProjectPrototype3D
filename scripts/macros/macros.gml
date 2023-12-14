@@ -2,7 +2,8 @@
 
 #macro DEFAULT_CUBE_SIZE 64
 
-#macro SQUARE			0
-#macro PLANE			1
-#macro SPRITE			2
-#macro CROSSED_SPRITE	3
+#macro MODEL			0
+#macro SQUARE			1
+#macro PLANE			2
+#macro SPRITE			3
+#macro CROSSED_SPRITE	4

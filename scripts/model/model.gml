@@ -4,6 +4,7 @@
 function Model() constructor {
 	self._parent			= undefined;
 	
+	self._model_type		= undefined;
 	self._model_data		= undefined;
 	self._model_texture		= undefined;
 	self._model_texture_map	= undefined;
@@ -34,19 +35,28 @@ function Model() constructor {
 	}
 	
 	/// @function getModelData();
-	/// @description Get size of ingame model
+	/// @description Get data of model
 	/// @returns {Id.VertexBuffer|undefined}
 	
 	getModelData = function() {
 		return self._model_data;
 	}
 	
+	/// @function getModelType();
+	/// @description Get type of model
+	/// @returns {real|undefined}
+	
+	getModelType = function() {
+		return self._model_type;
+	}
+	
 	/// @function setModelData(model);
-	/// @description Set size of ingame model
+	/// @description Set model data
 	
 	/// @param {real|Id.VertexBuffer} __model_data
 	
-	setModelData = function(__model_data = undefined) {
+	setModelData = function(__model_data) {
+		self._model_type = typeof(__model_data) == "number" ? __model_data : MODEL;
 		self._model_data = (is_undefined(__model_data)) ? undefined : model_choose_variant(__model_data, _model_texture_map, _size);
 	}
 	
@@ -112,18 +122,18 @@ function Model() constructor {
 		var __model_buffer_size = buffer_get_size(__model_buffer), __j = 0; for (var __i=0; __i<__model_buffer_size; __i+=36) {
 			var __x_orientation = 0, __y_orientation = 0, __z_orientation = 0;
 				
-			var __x = buffer_peek(__model_buffer, __i + 0, buffer_f32);
-			var __y = buffer_peek(__model_buffer, __i + 4, buffer_f32);
-			var __z = buffer_peek(__model_buffer, __i + 8, buffer_f32);
+			var __x = buffer_peek(__model_buffer, __i + 0, buffer_f32),
+				__y = buffer_peek(__model_buffer, __i + 4, buffer_f32),
+				__z = buffer_peek(__model_buffer, __i + 8, buffer_f32);
 				
 			if (__i+36 >= __model_buffer_size) {
 				__x_orientation = sign(__x);
 				__y_orientation = sign(__y);
 				__z_orientation = sign(__z);
 			} else {
-				var __x2 = buffer_peek(__model_buffer, __i+36 + 0, buffer_f32);
-				var __y2 = buffer_peek(__model_buffer, __i+36 + 4, buffer_f32);
-				var __z2 = buffer_peek(__model_buffer, __i+36 + 8, buffer_f32);
+				var __x2 = buffer_peek(__model_buffer, __i+36 + 0, buffer_f32),
+					__y2 = buffer_peek(__model_buffer, __i+36 + 4, buffer_f32),
+					__z2 = buffer_peek(__model_buffer, __i+36 + 8, buffer_f32);
 					
 				var __x_vec = sign(__x - __x2), __y_vec = sign(__y - __y2), __z_vec = sign(__z - __z2);
 				__x_orientation = (__x == __x2) ? sign(__x) : ((__x_vec == 0) ? -1 : __x_vec);
@@ -201,12 +211,9 @@ function Model() constructor {
 	/// @description Generate texture map of ingame model
 	
 	generateTetxtureMap = function() {
-		if (!is_undefined(self._model_texture) && sprite_exists(self._model_texture)) {
-			var __subimg_count = sprite_get_number(self._model_texture);
-			
-			for(var __i = 0; __i < __subimg_count; __i++) {
-				self._model_texture_map[__i] = sprite_get_uvs(self._model_texture, __i);
-			}
+		if (is_undefined(self._model_texture) || !sprite_exists(self._model_texture)) return;
+		for(var __i = 0; __i < sprite_get_number(self._model_texture); __i++) {
+			self._model_texture_map[__i] = sprite_get_uvs(self._model_texture, __i);
 		}
 	}
 	
@@ -219,76 +226,25 @@ function Model() constructor {
 		// Make sure there is a model to work with
 		if (is_undefined(__model) || is_undefined(__tex_map)) then return;
 		
-		// Assign uv data to every face of the square
-		// face_...[0] = left, face_...[1] = top, face_...[2] = right, face_...[3] = bottom
-		var __face_front, __face_right, __face_back, __face_left, __face_top, __face_bottom;
-	
-		if (array_length(__tex_map) <= 1) {
-			__face_front	= __tex_map[0];
-			__face_right	= __tex_map[0];
-			__face_back		= __tex_map[0];
-			__face_left		= __tex_map[0];
-			__face_top		= __tex_map[0];
-			__face_bottom	= __tex_map[0];
-		} else {
-			__face_front	= __tex_map[0];
-			__face_right	= __tex_map[1];
-			__face_back		= __tex_map[2];
-			__face_left		= __tex_map[3];
-			__face_top		= __tex_map[4];
-			__face_bottom	= __tex_map[5];
+		// Create uv data map from texture map
+		var __uv_data = []; for (var __i = 0; __i < array_length(__tex_map); __i++) {
+			var __current_face = __tex_map[__i];
+			array_push(__uv_data,
+				[__current_face[0], __current_face[3]],
+				[__current_face[0], __current_face[1]],
+				[__current_face[2], __current_face[3]],
+				[__current_face[2], __current_face[1]],
+				[__current_face[2], __current_face[3]],
+				[__current_face[0], __current_face[1]]
+			);
 		}
-			
-		var __new_tex_map = [
-			[__face_front[0], __face_front[3]],
-			[__face_front[0], __face_front[1]],
-			[__face_front[2], __face_front[3]],
-			[__face_front[2], __face_front[1]],
-			[__face_front[2], __face_front[3]],
-			[__face_front[0], __face_front[1]],
-			// ------------------------------//
-			[__face_right[0], __face_right[3]],
-			[__face_right[0], __face_right[1]],
-			[__face_right[2], __face_right[3]],
-			[__face_right[2], __face_right[1]],
-			[__face_right[2], __face_right[3]],
-			[__face_right[0], __face_right[1]],
-			// ------------------------------//
-			[__face_back[0], __face_back[3]],
-			[__face_back[0], __face_back[1]],
-			[__face_back[2], __face_back[3]],
-			[__face_back[2], __face_back[1]],
-			[__face_back[2], __face_back[3]],
-			[__face_back[0], __face_back[1]],
-			// ------------------------------//
-			[__face_left[0], __face_left[3]],
-			[__face_left[0], __face_left[1]],
-			[__face_left[2], __face_left[3]],
-			[__face_left[2], __face_left[1]],
-			[__face_left[2], __face_left[3]],
-			[__face_left[0], __face_left[1]],
-			// ------------------------------//
-			[__face_top[0], __face_top[3]],
-			[__face_top[0], __face_top[1]],
-			[__face_top[2], __face_top[3]],
-			[__face_top[2], __face_top[1]],
-			[__face_top[2], __face_top[3]],
-			[__face_top[0], __face_top[1]],
-			// ------------------------------//
-			[__face_bottom[0], __face_bottom[3]],
-			[__face_bottom[0], __face_bottom[1]],
-			[__face_bottom[2], __face_bottom[3]],
-			[__face_bottom[2], __face_bottom[1]],
-			[__face_bottom[2], __face_bottom[3]],
-			[__face_bottom[0], __face_bottom[1]]
-		];
 			
 		var __model_buffer = buffer_create_from_vertex_buffer(__model, buffer_fixed, 1);
 			
 		// Rewrite the uv data of all vertices
 		var __model_buffer_size = buffer_get_size(__model_buffer), __j = 0; for (var __i=0; __i<__model_buffer_size; __i+=36) {
-			buffer_poke(__model_buffer, __i + 24, buffer_f32, __new_tex_map[__j][0]); // U
-			buffer_poke(__model_buffer, __i + 28, buffer_f32, __new_tex_map[__j][1]); // V
+			buffer_poke(__model_buffer, __i + 24, buffer_f32, __uv_data[__j][0]); // U
+			buffer_poke(__model_buffer, __i + 28, buffer_f32, __uv_data[__j][1]); // V
 			__j++;
 		}
 
