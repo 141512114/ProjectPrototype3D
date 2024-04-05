@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "model_general",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "model",
-    "path": "folders/Scripts/actions/model.yy",
+  "$GMScript":"",
+  "%Name":"model_general",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"model_general",
+  "parent":{
+    "name":"model",
+    "path":"folders/Scripts/actions/model.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,12 +1,12 @@
 {
   "$GMScript":"",
-  "%Name":"create_grid",
+  "%Name":"inventoryManager",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"create_grid",
+  "name":"inventoryManager",
   "parent":{
-    "name":"actions",
-    "path":"folders/Scripts/actions.yy",
+    "name":"classes",
+    "path":"folders/Scripts/classes.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

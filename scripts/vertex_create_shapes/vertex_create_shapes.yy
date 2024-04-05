@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "vertex_create_shapes",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "vertex",
-    "path": "folders/Scripts/actions/vertex.yy",
+  "$GMScript":"",
+  "%Name":"vertex_create_shapes",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"vertex_create_shapes",
+  "parent":{
+    "name":"vertex",
+    "path":"folders/Scripts/actions/vertex.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

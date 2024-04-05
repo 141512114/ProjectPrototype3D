@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "vertex_general",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "vertex",
-    "path": "folders/Scripts/actions/vertex.yy",
+  "$GMScript":"",
+  "%Name":"vertex_general",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"vertex_general",
+  "parent":{
+    "name":"vertex",
+    "path":"folders/Scripts/actions/vertex.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

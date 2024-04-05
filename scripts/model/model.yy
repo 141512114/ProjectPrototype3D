@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "model",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "classes",
-    "path": "folders/Scripts/classes.yy",
+  "$GMScript":"",
+  "%Name":"model",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"model",
+  "parent":{
+    "name":"classes",
+    "path":"folders/Scripts/classes.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }
