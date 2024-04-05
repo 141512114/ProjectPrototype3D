@@ -1,21 +1,20 @@
 {
   "$GMObject":"",
-  "%Name":"par_enemy",
+  "%Name":"o_player_inventory",
   "eventList":[
     {"$GMEvent":"","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":12,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":1,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"par_enemy",
+  "name":"o_player_inventory",
   "overriddenProperties":[],
   "parent":{
-    "name":"enemy",
-    "path":"folders/Objects/entities/enemy.yy",
+    "name":"player",
+    "path":"folders/Objects/entities/player.yy",
   },
-  "parentObjectId":{
-    "name":"par_entity",
-    "path":"objects/par_entity/par_entity.yy",
-  },
-  "persistent":false,
+  "parentObjectId":null,
+  "persistent":true,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
   "physicsFriction":0.2,
@@ -34,5 +33,5 @@
   "solid":false,
   "spriteId":null,
   "spriteMaskId":null,
-  "visible":false,
+  "visible":true,
 }

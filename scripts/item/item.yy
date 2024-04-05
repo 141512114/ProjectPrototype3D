@@ -1,9 +1,9 @@
 {
   "$GMScript":"",
-  "%Name":"entity",
+  "%Name":"item",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"entity",
+  "name":"item",
   "parent":{
     "name":"entities",
     "path":"folders/Scripts/classes/entities.yy",

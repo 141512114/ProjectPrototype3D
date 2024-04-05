@@ -1,6 +1,6 @@
 /// @description Draw debug UI
 
-var __look_dir = entity_class.getEntityViewDirection();
+var __look_dir = player_class.getEntityViewDirection();
 
 draw_set_color(c_white);
 
@@ -13,15 +13,13 @@ var __debug_colors = {
 	_player: c_lime,
 }
 
-var __x_off = 20, __y_off = 20, __to_draw = [
-	[__debug_colors._player, ( "HP points: " + string(entity_class.getHealthPoints()) + " / " + string(entity_class.getMaxHealthPoints()) )],
-	[__debug_colors._player, ( "Look direction (Angle): " + string(__look_dir) )],
-	[__debug_colors._player, ( "Image angle: " + string(image_angle) )],
-	[__debug_colors._player, ( "X Rotation: " + string(entity_class.getRotation()[0]) )],
-	[__debug_colors._player, ( "Y Rotation: " + string(entity_class.getRotation()[1]) )],
-	[__debug_colors._player, ( "Z Rotation: " + string(entity_class.getRotation()[2]) )],
-	[__debug_colors._player, ( "X Position: " + string(x) )],
-	[__debug_colors._player, ( "Y Position: " + string(y) )]
+var __x_off = 20, __y_off = 20;
+var __to_draw = [
+	[__debug_colors[$ "_player"], ( "HP points: " + string(player_class.getHealthPoints()) + " / " + string(player_class.getMaxHealthPoints()) )],
+	[__debug_colors[$ "_player"], ( "Look direction (Angle): " + string(__look_dir) )],
+	[__debug_colors[$ "_player"], ( "Image angle: " + string(image_angle) )],
+	[__debug_colors[$ "_player"], ( "X Position: " + string(x) )],
+	[__debug_colors[$ "_player"], ( "Y Position: " + string(y) )]
 ];
 
 for(var __i = 0; __i < array_length(__to_draw); __i++) {

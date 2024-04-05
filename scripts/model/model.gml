@@ -9,16 +9,17 @@ function Model() constructor {
 	self._model_texture		= undefined;
 	self._model_texture_map	= undefined;
 	
-	self._x = 0;
-	self._y = 0;
-	self._z = 0;
+	self._x					= 0;
+	self._y					= 0;
+	self._z					= 0;
 	
-	self._size		= [DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE];
-	self._rotation	= [0, 0, 0];
-	self._transform	= [1, 1, 1];
+	self._size				= [DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE];
+	self._rotation			= [0, 0, 0];
+	self._transform			= [1, 1, 1];
 	
 	/// @function getParentId();
 	/// @description Get parent id of ingame model. The parent is the host of this model class
+	
 	/// @returns {Any|Undefined}
 	
 	getParentId = function() {
@@ -36,6 +37,7 @@ function Model() constructor {
 	
 	/// @function getModelData();
 	/// @description Get data of model
+	
 	/// @returns {Id.VertexBuffer|undefined}
 	
 	getModelData = function() {
@@ -44,6 +46,7 @@ function Model() constructor {
 	
 	/// @function getModelType();
 	/// @description Get type of model
+	
 	/// @returns {real|undefined}
 	
 	getModelType = function() {
@@ -90,6 +93,7 @@ function Model() constructor {
 	
 	/// @function getSize();
 	/// @description Get size of ingame model
+	
 	/// @returns {Array<Real>}
 	
 	getSize = function() {
@@ -154,6 +158,7 @@ function Model() constructor {
 	
 	/// @function getTransform();
 	/// @description Get transform properties of ingame model
+	
 	/// @returns {Array<Real>}
 	
 	getTransform = function() {
@@ -173,6 +178,7 @@ function Model() constructor {
 	
 	/// @function getRotation();
 	/// @description Get rotation properties of ingame model
+	
 	/// @returns {Array<Real>}
 	
 	getRotation = function() {
@@ -192,6 +198,7 @@ function Model() constructor {
 	
 	/// @function getTextureMap();
 	/// @description Get texture map of ingame model
+	
 	/// @returns {Array<Array<Real>>}
 	
 	getTextureMap = function() {
@@ -227,7 +234,8 @@ function Model() constructor {
 		if (is_undefined(__model) || is_undefined(__tex_map)) then return;
 		
 		// Create uv data map from texture map
-		var __uv_data = []; for (var __i = 0; __i < array_length(__tex_map); __i++) {
+		var __uv_data = [];
+		for (var __i = 0; __i < array_length(__tex_map); __i++) {
 			var __current_face = __tex_map[__i];
 			array_push(__uv_data,
 				[__current_face[0], __current_face[3]],
@@ -242,7 +250,9 @@ function Model() constructor {
 		var __model_buffer = buffer_create_from_vertex_buffer(__model, buffer_fixed, 1);
 			
 		// Rewrite the uv data of all vertices
-		var __model_buffer_size = buffer_get_size(__model_buffer), __j = 0; for (var __i=0; __i<__model_buffer_size; __i+=36) {
+		var __model_buffer_size = buffer_get_size(__model_buffer), __j = 0;
+		for (var __i = 0; __i < __model_buffer_size; __i += 36) {
+			if (__j > array_length(__uv_data)-1) break;
 			buffer_poke(__model_buffer, __i + 24, buffer_f32, __uv_data[__j][0]); // U
 			buffer_poke(__model_buffer, __i + 28, buffer_f32, __uv_data[__j][1]); // V
 			__j++;
@@ -255,6 +265,7 @@ function Model() constructor {
 	
 	/// @function getTexture();
 	/// @description Get texture of ingame model
+	
 	/// @returns {real|Pointer.Texture}
 	
 	getTexture = function() {

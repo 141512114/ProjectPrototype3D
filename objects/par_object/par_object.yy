@@ -14,8 +14,8 @@
     "path":"folders/Objects/objects.yy",
   },
   "parentObjectId":{
-    "name":"par_solid",
-    "path":"objects/par_solid/par_solid.yy",
+    "name":"par_draw",
+    "path":"objects/par_draw/par_draw.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,

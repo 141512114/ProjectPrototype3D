@@ -1,12 +1,12 @@
 {
   "$GMScript":"",
-  "%Name":"entity",
+  "%Name":"player",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"entity",
+  "name":"player",
   "parent":{
-    "name":"entities",
-    "path":"folders/Scripts/classes/entities.yy",
+    "name":"player",
+    "path":"folders/Scripts/classes/entities/player.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

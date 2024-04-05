@@ -1,19 +1,24 @@
-/// @description Inherit the parent event
+/// @description Instantiate the player instance
 
-event_inherited();
+image_speed = 0;
+image_index = 0;
 
-// Remove model
-entity_class.clearVertexBuffers();
-entity_class.setModelData();
-// @feather ignore once GM1019
-entity_class.setTexture(undefined);
-entity_class.setTetxtureMap();
+// Z axis
+z = 0;
+
+player_class = new Player();
+// feather ignore once GM1041
+player_class.setParentId(self);
 
 // Settings
 sensitivity = 17;
 
 look_at = -1;
+plane_rot = 0;
 
-// Create camera object
-var __inst = instance_create(x, y, z, o_camera, "Camera");
-__inst.view_target = id;
+// Create the camera object
+var __inst_camera = instance_create(x, y, z, o_camera, "Camera");
+__inst_camera.view_target = id;
+
+// Create the inventory object
+var __inst_inventory = instance_create(x, y, z, o_player_inventory, "General");

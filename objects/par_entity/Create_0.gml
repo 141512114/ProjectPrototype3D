@@ -8,11 +8,16 @@ z = 0;
 
 // Create entity class
 entity_class = new Entity();
-// feather ignore all
+// feather ignore once GM1041
 entity_class.setParentId(self);
-entity_class.clearVertexBuffers();
-entity_class.setModelData(SPRITE);
-entity_class.setPosition(DEFAULT_CUBE_SIZE/2, DEFAULT_CUBE_SIZE/2);
+
+// Create model class
+model_class = new Model();
+// feather ignore all
+model_class.setParentId(self);
+model_class.clearVertexBuffers();
+model_class.setModelData(SPRITE);
+model_class.setPosition(DEFAULT_CUBE_SIZE/2, DEFAULT_CUBE_SIZE/2);
 // feather enable all
 
 // Entity settings

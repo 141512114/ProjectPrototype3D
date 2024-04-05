@@ -3,4 +3,4 @@
 // Inherit the parent event
 event_inherited();
 
-entity_class.setTexture(spr_six_sides_test);
+model_class.setTexture(spr_six_sides_test);

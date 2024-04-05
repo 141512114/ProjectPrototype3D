@@ -1,9 +1,9 @@
 {
   "$GMObject":"",
-  "%Name":"par_solid",
+  "%Name":"par_draw",
   "eventList":[],
   "managed":true,
-  "name":"par_solid",
+  "name":"par_draw",
   "overriddenProperties":[],
   "parent":{
     "name":"general",
@@ -26,7 +26,7 @@
   "properties":[],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
-  "solid":true,
+  "solid":false,
   "spriteId":null,
   "spriteMaskId":{
     "name":"spr_collision",

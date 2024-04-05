@@ -2,4 +2,4 @@
 
 model_class.clearVertexBuffers();
 delete model_class;
-delete entity_class;
+delete item_class;
