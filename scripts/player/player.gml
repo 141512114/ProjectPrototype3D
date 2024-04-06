@@ -8,7 +8,7 @@ function Player() : Entity() constructor {
 	pickUpItem = function () {
 		var __pos = getEntityPosition();
 		var __nearby_items = ds_list_create();
-		var __num = collision_circle_list(__pos[0], __pos[1], 22, par_item, false, true, __nearby_items, false);
+		var __num = collision_circle_list(__pos[0], __pos[1], 64, par_item, false, true, __nearby_items, false);
 		if (__num > 0) {
 		    for (var __i = 0; __i < __num; ++__i;) {
 				var __current_item = __nearby_items[| __i];

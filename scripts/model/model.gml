@@ -109,6 +109,7 @@ function Model() constructor {
 	
 	setSize = function(__x_size, __y_size, __z_size) {
 		self._size = [__x_size, __y_size, __z_size];
+		applySize();
 	}
 	
 	/// @function applySize();
@@ -196,8 +197,38 @@ function Model() constructor {
 		self._rotation = [__x_rotation, __y_rotation, __z_rotation];
 	}
 	
+	/// @function getTexture();
+	/// @description Get the texture of ingame model
+	
+	/// @returns {real|Pointer.Texture}
+	
+	getTexture = function() {
+		return (is_undefined(self._model_texture)) ? sprite_get_texture(-1, 0) : sprite_get_texture(self._model_texture, 0);
+	}
+	
+	/// @function getSprite();
+	/// @description Get the sprite of ingame model
+	
+	/// @returns {Asset.GMSprite}
+	
+	getSprite = function() {
+		return (is_undefined(self._model_texture)) ? spr_none : self._model_texture;
+	}
+	
+	/// @function setTexture(texture);
+	/// @description Set the texture of ingame model
+	
+	/// @param {Asset.GMSprite|any} __tex
+	
+	setTexture = function(__tex = spr_none) {
+		self._model_texture = __tex;
+		generateTetxtureMap();
+		if (is_undefined(getModelData())) return;
+		applyTextureMap();
+	}
+	
 	/// @function getTextureMap();
-	/// @description Get texture map of ingame model
+	/// @description Get the texture map of ingame model
 	
 	/// @returns {Array<Array<Real>>}
 	
@@ -206,7 +237,7 @@ function Model() constructor {
 	}
 	
 	/// @function setTetxtureMap(tex_map);
-	/// @description Set texture map of ingame model
+	/// @description Set the texture map of ingame model
 	
 	/// @param {Array<Array<Real>>} __tex_map
 	
@@ -218,10 +249,11 @@ function Model() constructor {
 	/// @description Generate texture map of ingame model
 	
 	generateTetxtureMap = function() {
-		if (is_undefined(self._model_texture) || !sprite_exists(self._model_texture)) return;
-		for(var __i = 0; __i < sprite_get_number(self._model_texture); __i++) {
-			self._model_texture_map[__i] = sprite_get_uvs(self._model_texture, __i);
+		var __sprite = getSprite(), __new_tex_map = [];
+		for(var __i = 0; __i < sprite_get_number(__sprite); __i++) {
+			__new_tex_map[__i] = sprite_get_uvs(__sprite, __i);
 		}
+		setTetxtureMap(__new_tex_map);
 	}
 	
 	/// @function applyTextureMap();
@@ -246,42 +278,23 @@ function Model() constructor {
 				[__current_face[0], __current_face[1]]
 			);
 		}
+		
+		show_debug_message(sprite_get_name(getSprite()) + " " + string(__uv_data));
 			
 		var __model_buffer = buffer_create_from_vertex_buffer(__model, buffer_fixed, 1);
 			
 		// Rewrite the uv data of all vertices
-		var __model_buffer_size = buffer_get_size(__model_buffer), __j = 0;
-		for (var __i = 0; __i < __model_buffer_size; __i += 36) {
-			if (__j > array_length(__uv_data)-1) break;
-			buffer_poke(__model_buffer, __i + 24, buffer_f32, __uv_data[__j][0]); // U
-			buffer_poke(__model_buffer, __i + 28, buffer_f32, __uv_data[__j][1]); // V
-			__j++;
+		var __model_buffer_size = buffer_get_size(__model_buffer);
+		for (var __f = 0; __f < array_length(__uv_data)-1; __f++;) {
+			var __offset =  36 * __f;
+			if (__offset > __model_buffer_size) break;
+			buffer_poke(__model_buffer, __offset + 24, buffer_f32, __uv_data[__f][0]); // U
+			buffer_poke(__model_buffer, __offset + 28, buffer_f32, __uv_data[__f][1]); // V
 		}
 
 		// feather ignore once GM1041
 		setModelData(vertex_create_buffer_from_buffer(__model_buffer, global.vformat));
 		buffer_delete(__model_buffer);
-	}
-	
-	/// @function getTexture();
-	/// @description Get texture of ingame model
-	
-	/// @returns {real|Pointer.Texture}
-	
-	getTexture = function() {
-		return (is_undefined(self._model_texture)) ? sprite_get_texture(-1, 0) : sprite_get_texture(self._model_texture, 0);
-	}
-	
-	/// @function setTexture(texture);
-	/// @description Set texture of ingame model
-	
-	/// @param {Asset.GMSprite|any} __tex
-	
-	setTexture = function(__tex = spr_none) {
-		self._model_texture = __tex;
-		generateTetxtureMap();
-		if (is_undefined(getModelData())) return;
-		applyTextureMap();
 	}
 	
 	// This has to be set here, otherwise it will cause an error because of the missing existance of the function

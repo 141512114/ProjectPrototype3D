@@ -14,6 +14,6 @@ model_class = new Model();
 // feather ignore once GM1041
 model_class.setParentId(self);
 model_class.clearVertexBuffers();
-model_class.setModelData(CROSSED_SPRITE);
 model_class.setPosition(DEFAULT_CUBE_SIZE/2, DEFAULT_CUBE_SIZE/2);
 model_class.setSize(DEFAULT_CUBE_SIZE/2, DEFAULT_CUBE_SIZE/2, DEFAULT_CUBE_SIZE/2);
+model_class.setModelData(CROSSED_SPRITE);
