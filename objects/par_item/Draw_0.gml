@@ -7,6 +7,7 @@ draw_set_color(c_white);
 var __position = model_class.getPosition(),
 	__rotation = model_class.getRotation(),
 	__transform = model_class.getTransform();
+show_debug_message("Item position (model): " + string(__position))
 matrix_set(matrix_world, matrix_build(
 		x+__position[0], y+__position[1], z+__position[2],
 		__rotation[0], __rotation[1], __rotation[2],

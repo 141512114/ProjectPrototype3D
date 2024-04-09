@@ -6,6 +6,7 @@ function Model() constructor {
 	
 	self._model_type		= undefined;
 	self._model_data		= undefined;
+	self._model_data_raw	= undefined;
 	self._model_texture		= undefined;
 	self._model_texture_map	= undefined;
 	
@@ -20,7 +21,7 @@ function Model() constructor {
 	/// @function getParentId();
 	/// @description Get parent id of ingame model. The parent is the host of this model class
 	
-	/// @returns {Any|Undefined}
+	/// @returns {Any}
 	
 	getParentId = function() {
 		return self._parent;
@@ -38,7 +39,7 @@ function Model() constructor {
 	/// @function getModelData();
 	/// @description Get data of model
 	
-	/// @returns {Id.VertexBuffer|undefined}
+	/// @returns {Id.VertexBuffer}
 	
 	getModelData = function() {
 		return self._model_data;
@@ -47,7 +48,7 @@ function Model() constructor {
 	/// @function getModelType();
 	/// @description Get type of model
 	
-	/// @returns {real|undefined}
+	/// @returns {real}
 	
 	getModelType = function() {
 		return self._model_type;
@@ -56,19 +57,74 @@ function Model() constructor {
 	/// @function setModelData(model);
 	/// @description Set model data
 	
-	/// @param {real|Id.VertexBuffer} __model_data
+	/// @param {Id.VertexBuffer} __model_data
 	
 	setModelData = function(__model_data) {
-		self._model_type = typeof(__model_data) == "number" ? __model_data : MODEL;
-		self._model_data = (is_undefined(__model_data)) ? undefined : model_choose_variant(__model_data, _model_texture_map, _size);
+		if (is_undefined(__model_data)) return;
+		if (vertex_buffer_exists(self._model_data)) then vertex_delete_buffer(self._model_data);
+		self._model_data = __model_data;
+	}
+	
+	/// @function createModelData(model);
+	/// @description Get data of model
+	
+	/// @params {Any} __model_type
+	
+	createModelData = function(__model_type) {
+		self._model_type = typeof(__model_type) == "number" ? __model_type : MODEL;
+		
+		var __temp_model_data = self._model_type;
+		switch (self._model_type) {
+			case SQUARE:
+				__temp_model_data =	vertex_create_cube(0, 0, 0, self._size, getTextureMap());
+			case SPRITE:
+				__temp_model_data =	vertex_create_sprite(0, 0, 0, self._size, getTextureMap());
+			case CROSSED_SPRITE:
+				__temp_model_data =	vertex_create_crossed_sprite(0, 0, 0, self._size, getTextureMap());
+		}
+		
+		applyModelData(__temp_model_data);
+	}
+	
+	/// @function applyModelData(model);
+	/// @description Apply the given model data to the raw and final model data properties
+	
+	/// @params {Id.Buffer} __model_data
+	
+	applyModelData = function(__model_data) {
+		if (is_undefined(__model_data) || !buffer_exists(__model_data)) return;
+		setRawModelData(__model_data);
+		// Create a new vertex buffer from the raw material
+		var __new_v_buffer = vertex_create_buffer_from_buffer(__model_data, global.vformat);
+		show_debug_message("Hello: " + string(__new_v_buffer));
+		setModelData(__new_v_buffer);
+	}
+	
+	/// @function getRawModelData();
+	/// @description Get data of model
+	
+	/// @returns {Id.Buffer|any}
+	
+	getRawModelData = function() {
+		return self._model_data_raw;
+	}
+	
+	/// @function setRawModelData(model);
+	/// @description Set raw model data
+	
+	/// @param {Id.Buffer} __model_raw
+	
+	setRawModelData = function(__model_raw) {
+		if (is_undefined(__model_raw)) return;
+		if (buffer_exists(self._model_data_raw)) then buffer_delete(self._model_data_raw);
+		self._model_data_raw = __model_raw;
 	}
 	
 	/// @function removeJunkFaces();
 	/// @description Remove unnecessary faces of the (best would be static) model, which the player won't see anyways
 	
 	removeJunkFaces = function() {
-		var __parent = getParentId();
-		setModelData(vertex_remove_face(__parent, getModelData()));
+		// setModelData(vertex_remove_face(getParentId(), self._model_data));
 	}
 	
 	/// @function getPosition();
@@ -116,29 +172,29 @@ function Model() constructor {
 	/// @description Apply size to the model (IMPORTANT! Shouldn't be used during runtime. Use setTransform() instead)
 	
 	applySize = function() {
-		var __model = getModelData(), __size = getSize();
+		var __size = getSize(), __model_buffer = self._model_data_raw;
+		if (is_undefined(__model_buffer)) return;
 		
-		// Make sure there is a model to work with
-		if (is_undefined(__model)) then return;
-		
-		var __model_buffer = buffer_create_from_vertex_buffer(__model, buffer_fixed, 1);
+		var __temp_buffer = buffer_create(buffer_get_size(__model_buffer), buffer_fixed, 1);
+		buffer_copy(__model_buffer, 0, buffer_get_size(__model_buffer), __temp_buffer, 0);
 			
 		// Rewrite the x-, y-, and z-sizing data of all vertices (change positions)
-		var __model_buffer_size = buffer_get_size(__model_buffer), __j = 0; for (var __i=0; __i<__model_buffer_size; __i+=36) {
+		var __model_buffer_size = buffer_get_size(__temp_buffer), __j = 0;
+		for (var __i = 0; __i < __model_buffer_size; __i += 36) {
 			var __x_orientation = 0, __y_orientation = 0, __z_orientation = 0;
 				
-			var __x = buffer_peek(__model_buffer, __i + 0, buffer_f32),
-				__y = buffer_peek(__model_buffer, __i + 4, buffer_f32),
-				__z = buffer_peek(__model_buffer, __i + 8, buffer_f32);
+			var __x = buffer_peek(__temp_buffer, __i + 0, buffer_f32),
+				__y = buffer_peek(__temp_buffer, __i + 4, buffer_f32),
+				__z = buffer_peek(__temp_buffer, __i + 8, buffer_f32);
 				
 			if (__i+36 >= __model_buffer_size) {
 				__x_orientation = sign(__x);
 				__y_orientation = sign(__y);
 				__z_orientation = sign(__z);
 			} else {
-				var __x2 = buffer_peek(__model_buffer, __i+36 + 0, buffer_f32),
-					__y2 = buffer_peek(__model_buffer, __i+36 + 4, buffer_f32),
-					__z2 = buffer_peek(__model_buffer, __i+36 + 8, buffer_f32);
+				var __x2 = buffer_peek(__temp_buffer, __i+36 + 0, buffer_f32),
+					__y2 = buffer_peek(__temp_buffer, __i+36 + 4, buffer_f32),
+					__z2 = buffer_peek(__temp_buffer, __i+36 + 8, buffer_f32);
 					
 				var __x_vec = sign(__x - __x2), __y_vec = sign(__y - __y2), __z_vec = sign(__z - __z2);
 				__x_orientation = (__x == __x2) ? sign(__x) : ((__x_vec == 0) ? -1 : __x_vec);
@@ -146,15 +202,14 @@ function Model() constructor {
 				__z_orientation = (__z == 0 && __z2 == 0) ? 0 : ((__z_vec == 0 || __z_vec == -1) ? __z_vec+1 : __z_vec);
 			}
 				
-			buffer_poke(__model_buffer, __i + 0, buffer_f32, 0 + __x_orientation * __size[0]/2); // X
-			buffer_poke(__model_buffer, __i + 4, buffer_f32, 0 + __y_orientation * __size[1]/2); // Y
-			buffer_poke(__model_buffer, __i + 8, buffer_f32, 0 + __z_orientation * __size[2]); // Z
+			buffer_poke(__temp_buffer, __i + 0, buffer_f32, 0 + __x_orientation * __size[0]/2); // X
+			buffer_poke(__temp_buffer, __i + 4, buffer_f32, 0 + __y_orientation * __size[1]/2); // Y
+			buffer_poke(__temp_buffer, __i + 8, buffer_f32, 0 + __z_orientation * __size[2]); // Z
 			__j++;
 		}
 
 		// feather ignore once GM1041
-		setModelData(vertex_create_buffer_from_buffer(__model_buffer, global.vformat));
-		buffer_delete(__model_buffer);
+		applyModelData(__temp_buffer);
 	}
 	
 	/// @function getTransform();
@@ -223,7 +278,7 @@ function Model() constructor {
 	setTexture = function(__tex = spr_none) {
 		self._model_texture = __tex;
 		generateTetxtureMap();
-		if (is_undefined(getModelData())) return;
+		if (is_undefined(self._model_data)) return;
 		applyTextureMap();
 	}
 	
@@ -260,10 +315,11 @@ function Model() constructor {
 	/// @description Apply texture map to the model
 	
 	applyTextureMap = function() {
-		var __model = getModelData(), __tex_map = getTextureMap();
+		var __model_buffer = self._model_data_raw, __tex_map = getTextureMap();
+		if (is_undefined(__model_buffer) || is_undefined(__tex_map)) then return;
 		
-		// Make sure there is a model to work with
-		if (is_undefined(__model) || is_undefined(__tex_map)) then return;
+		var __temp_buffer = buffer_create(buffer_get_size(__model_buffer), buffer_fixed, 1);
+		buffer_copy(__model_buffer, 0, buffer_get_size(__model_buffer), __temp_buffer, 0);
 		
 		// Create uv data map from texture map
 		var __uv_data = [];
@@ -281,31 +337,47 @@ function Model() constructor {
 		
 		show_debug_message(sprite_get_name(getSprite()) + " " + string(__uv_data));
 			
-		var __model_buffer = buffer_create_from_vertex_buffer(__model, buffer_fixed, 1);
-			
 		// Rewrite the uv data of all vertices
-		var __model_buffer_size = buffer_get_size(__model_buffer);
-		for (var __f = 0; __f < array_length(__uv_data)-1; __f++;) {
+		var __model_buffer_size = buffer_get_size(__temp_buffer);
+		for (var __f = 0; __f < array_length(__uv_data)-1; __f++) {
 			var __offset =  36 * __f;
 			if (__offset > __model_buffer_size) break;
-			buffer_poke(__model_buffer, __offset + 24, buffer_f32, __uv_data[__f][0]); // U
-			buffer_poke(__model_buffer, __offset + 28, buffer_f32, __uv_data[__f][1]); // V
+			buffer_poke(__temp_buffer, __offset + 24, buffer_f32, __uv_data[__f][0]); // U
+			buffer_poke(__temp_buffer, __offset + 28, buffer_f32, __uv_data[__f][1]); // V
 		}
 
 		// feather ignore once GM1041
-		setModelData(vertex_create_buffer_from_buffer(__model_buffer, global.vformat));
-		buffer_delete(__model_buffer);
+		applyModelData(__temp_buffer);
 	}
 	
 	// This has to be set here, otherwise it will cause an error because of the missing existance of the function
 	setTexture();
 	
 	/// @function clearVertexBuffers();
-	/// @description Clear all vertex buffers, which are currently used by this class
+	/// @description Clear all vertex buffers which are currently used by this class
 	
 	clearVertexBuffers = function() {
-		var __model = getModelData();
-		if (is_undefined(__model)) return;
-		vertex_delete_buffer(__model);
+		var __model = self._model_data;
+		if (!is_undefined(__model) && vertex_buffer_exists(__model)) {
+			vertex_delete_buffer(__model);
+		}
+	}
+	
+	/// @function clearBuffers();
+	/// @description Clear all buffers which are currently used by this class
+	
+	clearBuffers = function() {
+		var __model = self._model_data_raw;
+		if (!is_undefined(__model) && buffer_exists(__model)) {
+			buffer_delete(__model);
+		}
+	}
+	
+	/// @function clearAllBuffers();
+	/// @description Clear any and every buffer which is currently used by this class
+	
+	clearAllBuffers = function() {
+		clearVertexBuffers();
+		clearBuffers();
 	}
 }

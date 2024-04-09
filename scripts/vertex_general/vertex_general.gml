@@ -1,3 +1,21 @@
+/// @function vertex_buffer_exists(__buffer);
+/// @description Check if a vertex buffer exists (Is this buffer a vertex buffer?)
+
+/// @param {Id.VertexBuffer} __buffer
+
+function vertex_buffer_exists(__buffer){
+    var __exists = false, __n,	___err;
+	
+    try {
+		__n = vertex_get_buffer_size(__buffer);
+		__exists = true;
+	} catch (__err) {}
+	
+    return __exists;
+}
+
+
+
 /// @function vertex_add_point(vertex_buffer, x, y, z, x_normal, y_normal, z_normal, u, v, color, alpha);
 /// @description Add a vertex point to any vertex buffer
 

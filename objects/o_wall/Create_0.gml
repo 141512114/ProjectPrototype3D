@@ -3,4 +3,4 @@
 event_inherited();
 
 // Remove unnecessary faces
-model_class.removeJunkFaces();
+// model_class.removeJunkFaces();

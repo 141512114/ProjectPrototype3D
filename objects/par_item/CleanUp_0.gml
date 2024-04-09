@@ -1,5 +1,5 @@
 /// @description Delete vertex buffer
 
-model_class.clearVertexBuffers();
+model_class.clearAllBuffers();
 delete model_class;
 delete item_class;
