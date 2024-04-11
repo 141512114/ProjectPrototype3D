@@ -74,7 +74,6 @@
     {"id":{"name":"inventoryManager","path":"scripts/inventoryManager/inventoryManager.yy",},},
     {"id":{"name":"item","path":"scripts/item/item.yy",},},
     {"id":{"name":"macros","path":"scripts/macros/macros.yy",},},
-    {"id":{"name":"model_general","path":"scripts/model_general/model_general.yy",},},
     {"id":{"name":"model","path":"scripts/model/model.yy",},},
     {"id":{"name":"player","path":"scripts/player/player.yy",},},
     {"id":{"name":"vertex_create_shapes","path":"scripts/vertex_create_shapes/vertex_create_shapes.yy",},},

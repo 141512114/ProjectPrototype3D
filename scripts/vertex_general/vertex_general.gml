@@ -64,22 +64,22 @@ function vertex_remove_face(__object, __model) {
 			
 		// Load every valid value of every vertex based on collisions with closeby blocks
 		var __model_buffer_size = buffer_get_size(__model_buffer); for (var __i=0; __i<__model_buffer_size; __i+=36) {
-			var __nx = buffer_peek(__model_buffer, __i + 12, buffer_f32),
-				__ny = buffer_peek(__model_buffer, __i + 16, buffer_f32),
-				__nz = buffer_peek(__model_buffer, __i + 20, buffer_f32);
+			var __nx = buffer_peek(__model_buffer, __i + 12, buffer_f32);
+			var __ny = buffer_peek(__model_buffer, __i + 16, buffer_f32);
+			var __nz = buffer_peek(__model_buffer, __i + 20, buffer_f32);
 
 			if (((__lx && __nx != -1 || !__lx) && (__rx && __nx != 1 || !__rx)) && ((__fy && __ny != 1 || !__fy) && (__by && __ny != -1 || !__by))) {
-				var __xx = buffer_peek(__model_buffer, __i + 0, buffer_f32),
-					__yy = buffer_peek(__model_buffer, __i + 4, buffer_f32),
-					__zz = buffer_peek(__model_buffer, __i + 8, buffer_f32);
+				var __xx = buffer_peek(__model_buffer, __i + 0, buffer_f32);
+				var __yy = buffer_peek(__model_buffer, __i + 4, buffer_f32);
+				var __zz = buffer_peek(__model_buffer, __i + 8, buffer_f32);
 					
-				var __u = buffer_peek(__model_buffer, __i + 24, buffer_f32),
-					__v = buffer_peek(__model_buffer, __i + 28, buffer_f32);
+				var __u = buffer_peek(__model_buffer, __i + 24, buffer_f32);
+				var __v = buffer_peek(__model_buffer, __i + 28, buffer_f32);
 			
-				var __int_r = buffer_peek(__model_buffer, __i + 32, buffer_u8),
-					__int_g = buffer_peek(__model_buffer, __i + 33, buffer_u8),
-					__int_b = buffer_peek(__model_buffer, __i + 34, buffer_u8),
-					__alpha = buffer_peek(__model_buffer, __i + 35, buffer_u8);
+				var __int_r = buffer_peek(__model_buffer, __i + 32, buffer_u8);
+				var __int_g = buffer_peek(__model_buffer, __i + 33, buffer_u8);
+				var __int_b = buffer_peek(__model_buffer, __i + 34, buffer_u8);
+				var __alpha = buffer_peek(__model_buffer, __i + 35, buffer_u8);
 					
 				// Save these extracted values into a seperated ds_list
 				ds_list_add(__model_ds_list, __xx, __yy, __zz, __nx, __ny, __nz, __u, __v, __int_r, __int_g, __int_b, __alpha);
@@ -95,21 +95,21 @@ function vertex_remove_face(__object, __model) {
 		
 		// Use the stored values in the ds_list and build a new model
 		for (var __i=0; __i<ds_list_size(__model_ds_list)-1; __i+=12) {
-			var __xx = ds_list_find_value(__model_ds_list, __i + 0),
-				__yy = ds_list_find_value(__model_ds_list, __i + 1),
-				__zz = ds_list_find_value(__model_ds_list, __i + 2);
+			var __xx = ds_list_find_value(__model_ds_list, __i + 0);
+			var __yy = ds_list_find_value(__model_ds_list, __i + 1);
+			var __zz = ds_list_find_value(__model_ds_list, __i + 2);
 		
-			var __nx = ds_list_find_value(__model_ds_list, __i + 3),
-				__ny = ds_list_find_value(__model_ds_list, __i + 4),
-				__nz = ds_list_find_value(__model_ds_list, __i + 5);
+			var __nx = ds_list_find_value(__model_ds_list, __i + 3);
+			var __ny = ds_list_find_value(__model_ds_list, __i + 4);
+			var __nz = ds_list_find_value(__model_ds_list, __i + 5);
 		
-			var __u = ds_list_find_value(__model_ds_list, __i + 6),
-				__v = ds_list_find_value(__model_ds_list, __i + 7);
+			var __u = ds_list_find_value(__model_ds_list, __i + 6);
+			var __v = ds_list_find_value(__model_ds_list, __i + 7);
 			
-			var __int_r = ds_list_find_value(__model_ds_list, __i + 8),
-				__int_g = ds_list_find_value(__model_ds_list, __i + 9),
-				__int_b = ds_list_find_value(__model_ds_list, __i + 10),
-				__alpha = ds_list_find_value(__model_ds_list, __i + 11);
+			var __int_r = ds_list_find_value(__model_ds_list, __i + 8);
+			var __int_g = ds_list_find_value(__model_ds_list, __i + 9);
+			var __int_b = ds_list_find_value(__model_ds_list, __i + 10);
+			var __alpha = ds_list_find_value(__model_ds_list, __i + 11);
 			
 			buffer_write(__new_model_buffer, buffer_f32, __xx);
 			buffer_write(__new_model_buffer, buffer_f32, __yy);
