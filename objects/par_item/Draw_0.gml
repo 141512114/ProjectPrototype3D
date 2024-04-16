@@ -6,6 +6,4 @@ gpu_set_cullmode(cull_noculling);
 
 model_class.drawModelVertex();
 
-matrix_set(matrix_world, matrix_build_identity());
-
 gpu_set_cullmode(cull_counterclockwise);

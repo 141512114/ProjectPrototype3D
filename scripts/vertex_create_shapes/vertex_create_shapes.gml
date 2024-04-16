@@ -67,7 +67,6 @@ function buffer_shape_plane(
 	__alpha = 1
 ) {
 	if (is_undefined(__tex_map)) then return undefined;
-	show_debug_message("What the buffer got: " + string(__tex_map) + ", length: " + string(array_length(__tex_map)));
 	
 	// Create texture map info (UV data)
 	var __tex_left, __tex_top, __tex_right, __tex_bottom;
@@ -76,7 +75,8 @@ function buffer_shape_plane(
 	__tex_right		= __tex_map[2];
 	__tex_bottom	= __tex_map[3];
 	
-	var __transformation_matrix = matrix_build(0, 0, 0, __rotation[0], __rotation[1], __rotation[2], 1, 1, 1);
+	// var __transformation_matrix = matrix_build(0, 0, 0, __rotation[0], __rotation[1], __rotation[2], 1, 1, 1);
+	var __transformation_matrix = matrix_build(0, 0, 0, 0, 0, 0, 1, 1, 1);
 	
 	var __temp_buffer = buffer_create(216, buffer_fixed, 1);
 	buffer_seek(__temp_buffer, buffer_seek_start, 0);
@@ -97,43 +97,14 @@ function buffer_shape_plane(
 		var __pu = __current_point[6], __pv = __current_point[7];
 		// Transform points according to the given matrix
 		var __new_position = matrix_transform_vertex(__transformation_matrix, __px, __py, __pz);
-		buffer_create_point(__temp_buffer, __new_position[0], __new_position[1], __new_position[2], __pnx, __pny, __pnz, __pu, __pv, __color, __alpha);
-	}
-	
-	show_debug_message("########################## INSIDE THE CREATION PROCESS ###########################");
-	
-	for (var __i = 0; __i < buffer_get_size(__temp_buffer); __i += 36) {
-		var __temp_xx = buffer_peek(__temp_buffer, __i + 0, buffer_f32);
-		var __temp_yy = buffer_peek(__temp_buffer, __i + 4, buffer_f32);
-		var __temp_zz = buffer_peek(__temp_buffer, __i + 8, buffer_f32);
-					
-		var __nx = buffer_peek(__temp_buffer, __i + 12, buffer_s32);
-		var __ny = buffer_peek(__temp_buffer, __i + 16, buffer_s32);
-		var __nz = buffer_peek(__temp_buffer, __i + 20, buffer_s32);
-					
-		var __u = buffer_peek(__temp_buffer, __i + 24, buffer_f32);
-		var __v = buffer_peek(__temp_buffer, __i + 28, buffer_f32);
-		
-		var __int_r = buffer_peek(__temp_buffer, __i + 32, buffer_u8);
-		var __int_g = buffer_peek(__temp_buffer, __i + 33, buffer_u8);
-		var __int_b = buffer_peek(__temp_buffer, __i + 34, buffer_u8);
-		var __temp_alpha = buffer_peek(__temp_buffer, __i + 35, buffer_u8);
-			
-		show_debug_message(
-			"One vertex point (in buffer): " +
-			string(__temp_xx) + ", " +
-			string(__temp_yy) + ", " +
-			string(__temp_zz) + ", " +
-			string(__nx) + ", " +
-			string(__ny) + ", " +
-			string(__nz) + ", " +
-			string(__u) + ", " +
-			string(__v) + ", " +
-			string(__int_r) + ", " +
-			string(__int_g) + ", " +
-			string(__int_b) + ", " +
-			string(__temp_alpha)
-		);
+		// Transform normals and normalize them too
+		var __new_normals = matrix_transform_vertex(__transformation_matrix, __pnx, __pny, __pnz);
+		var __normal_magnitude = point_distance_3d(0, 0, 0, __new_normals[0], __new_normals[1], __new_normals[2]);
+		__new_normals[0] /= __normal_magnitude;
+		__new_normals[1] /= __normal_magnitude;
+		__new_normals[2] /= __normal_magnitude;
+		// Create the (vertex) point and store it in the buffer
+		buffer_create_point(__temp_buffer, __new_position[0], __new_position[1], __new_position[2], __new_normals[0], __new_normals[1], __new_normals[2], __pu, __pv, __color, __alpha);
 	}
 	
 	return __temp_buffer;

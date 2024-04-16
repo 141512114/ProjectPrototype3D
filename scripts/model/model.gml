@@ -7,7 +7,7 @@ function Model() constructor {
 	self._model_type		= undefined;
 	self._model_data		= undefined;
 	self._model_data_raw	= undefined;
-	self._model_texture		= undefined;
+	self._model_texture		= spr_none;
 	self._model_texture_map	= undefined;
 	
 	self._x					= 0;
@@ -72,7 +72,7 @@ function Model() constructor {
 		if (is_undefined(__model_data)) return;
 		if (vertex_buffer_exists(self._model_data)) then vertex_delete_buffer(self._model_data);
 		self._model_data = __model_data;
-		vertex_freeze(self._model_data);
+		// vertex_freeze(self._model_data);
 	}
 	
 	/// @function getRawModelData();
@@ -92,45 +92,7 @@ function Model() constructor {
 	setRawModelData = function(__model_raw) {
 		if (is_undefined(__model_raw)) return;
 		if (buffer_exists(self._model_data_raw)) then buffer_delete(self._model_data_raw);
-		
 		self._model_data_raw = __model_raw;
-		
-		show_debug_message("##################################################");
-		
-		var __temp_buffer = self._model_data_raw;
-		for (var __i = 0; __i < buffer_get_size(__temp_buffer); __i += 36) {
-			var __temp_xx = buffer_peek(__temp_buffer, __i + 0, buffer_f32);
-			var __temp_yy = buffer_peek(__temp_buffer, __i + 4, buffer_f32);
-			var __temp_zz = buffer_peek(__temp_buffer, __i + 8, buffer_f32);
-					
-			var __nx = buffer_peek(__temp_buffer, __i + 12, buffer_s32);
-			var __ny = buffer_peek(__temp_buffer, __i + 16, buffer_s32);
-			var __nz = buffer_peek(__temp_buffer, __i + 20, buffer_s32);
-					
-			var __u = buffer_peek(__temp_buffer, __i + 24, buffer_f32);
-			var __v = buffer_peek(__temp_buffer, __i + 28, buffer_f32);
-		
-			var __int_r = buffer_peek(__temp_buffer, __i + 32, buffer_u8);
-			var __int_g = buffer_peek(__temp_buffer, __i + 33, buffer_u8);
-			var __int_b = buffer_peek(__temp_buffer, __i + 34, buffer_u8);
-			var __temp_alpha = buffer_peek(__temp_buffer, __i + 35, buffer_u8);
-			
-			show_debug_message(
-				"One vertex point (in buffer): " +
-				string(__temp_xx) + ", " +
-				string(__temp_yy) + ", " +
-				string(__temp_zz) + ", " +
-				string(__nx) + ", " +
-				string(__ny) + ", " +
-				string(__nz) + ", " +
-				string(__u) + ", " +
-				string(__v) + ", " +
-				string(__int_r) + ", " +
-				string(__int_g) + ", " +
-				string(__int_b) + ", " +
-				string(__temp_alpha)
-			); 
-		}
 	}
 	
 	/// @function createModelData(model);
@@ -147,10 +109,13 @@ function Model() constructor {
 		switch (__temp_model_data) {
 			case SQUARE:
 				__temp_model_data =	vertex_create_cube(__temp_x, __temp_y, __temp_z, __temp_size, __temp_tex_map);
+				break;
 			case SPRITE:
 				__temp_model_data =	vertex_create_sprite(__temp_x, __temp_y, __temp_z, __temp_size, __temp_tex_map);
+				break;
 			case CROSSED_SPRITE:
 				__temp_model_data =	vertex_create_crossed_sprite(__temp_x, __temp_y, __temp_z, __temp_size, __temp_tex_map);
+				break;
 		}
 		
 		updateModelData(__temp_model_data);
@@ -187,9 +152,8 @@ function Model() constructor {
 			matrix_world,
 			matrix_build(__model_x, __model_y, __model_z, __rotation[0], __rotation[1], __rotation[2], __transform[0], __transform[1], __transform[2])
 		);
-
-		var __model = self._model_data,__tex = getTexture();
-		vertex_submit(__model, pr_trianglelist, __tex);
+		vertex_submit(self._model_data, pr_trianglelist, getTexture());
+		matrix_set(matrix_world, matrix_build_identity());
 	}
 	
 	/// @function removeJunkFaces();
@@ -313,7 +277,7 @@ function Model() constructor {
 	/// @returns {real|Pointer.Texture}
 	
 	getTexture = function() {
-		return (is_undefined(self._model_texture) || !sprite_exists(self._model_texture)) ? sprite_get_texture(-1, 0) : sprite_get_texture(self._model_texture, 0);
+		return sprite_get_texture(self._model_texture, 0);
 	}
 	
 	/// @function getSprite();
@@ -322,7 +286,7 @@ function Model() constructor {
 	/// @returns {Asset.GMSprite}
 	
 	getSprite = function() {
-		return (is_undefined(self._model_texture) || !sprite_exists(self._model_texture)) ? spr_none : self._model_texture;
+		return self._model_texture;
 	}
 	
 	/// @function setTexture(texture);
@@ -388,8 +352,6 @@ function Model() constructor {
 				[__current_face[0], __current_face[1]]
 			);
 		}
-		
-		show_debug_message(sprite_get_name(getSprite()) + " " + string(__uv_data));
 			
 		// Rewrite the uv data of all vertices
 		var __model_buffer_size = buffer_get_size(__temp_buffer);
@@ -397,7 +359,6 @@ function Model() constructor {
 			var __offset =  36 * __f;
 			if (__offset > __model_buffer_size) break;
 			var __u = __uv_data[__f][0], __v = __uv_data[__f][1];
-			show_debug_message("UV: " + string(__u) + "," + string(__v));
 			buffer_poke(__temp_buffer, __offset + 24, buffer_f32, __u);
 			buffer_poke(__temp_buffer, __offset + 28, buffer_f32, __v);
 		}

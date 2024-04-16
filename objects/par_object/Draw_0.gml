@@ -3,5 +3,3 @@
 draw_set_color(c_white);
 
 model_class.drawModelVertex();
-
-matrix_set(matrix_world, matrix_build_identity());
