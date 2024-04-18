@@ -31,15 +31,15 @@ function buffer_create_point(
 	buffer_write(__buffer_home, buffer_f32, __xx);
 	buffer_write(__buffer_home, buffer_f32, __yy);
 	buffer_write(__buffer_home, buffer_f32, __zz);
-	buffer_write(__buffer_home, buffer_s32, __nx);
-	buffer_write(__buffer_home, buffer_s32, __ny);
-	buffer_write(__buffer_home, buffer_s32, __nz);
+	buffer_write(__buffer_home, buffer_f32, __nx);
+	buffer_write(__buffer_home, buffer_f32, __ny);
+	buffer_write(__buffer_home, buffer_f32, __nz);
 	buffer_write(__buffer_home, buffer_f32, __u);
 	buffer_write(__buffer_home, buffer_f32, __v);
 	buffer_write(__buffer_home, buffer_u8, color_get_red(__color));
 	buffer_write(__buffer_home, buffer_u8, color_get_blue(__color));
 	buffer_write(__buffer_home, buffer_u8, color_get_green(__color));
-	buffer_write(__buffer_home, buffer_u8, __alpha);
+	buffer_write(__buffer_home, buffer_u8, 255 * __alpha);
 }
 
 /// @function buffer_shape_plane(x, y, z, size, rotation, texture_map, color, alpha);
@@ -75,8 +75,7 @@ function buffer_shape_plane(
 	__tex_right		= __tex_map[2];
 	__tex_bottom	= __tex_map[3];
 	
-	// var __transformation_matrix = matrix_build(0, 0, 0, __rotation[0], __rotation[1], __rotation[2], 1, 1, 1);
-	var __transformation_matrix = matrix_build(0, 0, 0, 0, 0, 0, 1, 1, 1);
+	var __transformation_matrix = matrix_build(0, 0, 0, __rotation[0], __rotation[1], __rotation[2], 1, 1, 1);
 	
 	var __temp_buffer = buffer_create(216, buffer_fixed, 1);
 	buffer_seek(__temp_buffer, buffer_seek_start, 0);
@@ -195,12 +194,12 @@ function vertex_create_cube(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CUBE
 	
 	// Create cube shapw
 	var __buffer_shape_cube = [
-		buffer_shape_plane(__xx, __yy, __zz, __size, [0, 0, 0],		__face_front, __color, __alpha),
-		buffer_shape_plane(__xx, __yy, __zz, __size, [0, 90, 0],	__face_right, __color, __alpha),
-		buffer_shape_plane(__xx, __yy, __zz, __size, [0, 180, 0],	__face_back, __color, __alpha),
-		buffer_shape_plane(__xx, __yy, __zz, __size, [0, -90, 0],	__face_left, __color, __alpha),
-		buffer_shape_plane(__xx, __yy, __zz, __size, [0, 0, 90],	__face_top, __color, __alpha),
-		buffer_shape_plane(__xx, __yy, __zz, __size, [0, 0, -90],	__face_bottom, __color, __alpha)
+		buffer_shape_plane(__xx,				__yy-__size[0]/2,	__zz,				__size, [0, 0, 0],		__face_front, __color, __alpha),
+		buffer_shape_plane(__xx,				__yy-__size[0]/2,	__zz,				__size, [0, 0, 90],		__face_right, __color, __alpha),
+		buffer_shape_plane(__xx,				__yy-__size[0]/2,	__zz,				__size, [0, 0, 180],	__face_back, __color, __alpha),
+		buffer_shape_plane(__xx,				__yy-__size[0]/2,	__zz,				__size, [0, 0, -90],	__face_left, __color, __alpha),
+		buffer_shape_plane(__xx,				__yy-__size[0],		__zz-__size[0]/2,	__size, [90, 0, 0],		__face_top, __color, __alpha),
+		buffer_shape_plane(__xx,				__yy,				__zz-__size[0]/2,	__size, [270, 0, 0],	__face_bottom, __color, __alpha)
 	];
 	
 	var __buffer_size_bytes = buffer_get_size(__buffer_shape_cube[0]);

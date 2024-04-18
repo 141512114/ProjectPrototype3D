@@ -6,7 +6,6 @@ function Model() constructor {
 	
 	self._model_type		= undefined;
 	self._model_data		= undefined;
-	self._model_data_raw	= undefined;
 	self._model_texture		= spr_none;
 	self._model_texture_map	= undefined;
 	
@@ -75,26 +74,6 @@ function Model() constructor {
 		// vertex_freeze(self._model_data);
 	}
 	
-	/// @function getRawModelData();
-	/// @description Get data of model
-	
-	/// @returns {Id.Buffer|any}
-	
-	getRawModelData = function() {
-		return self._model_data_raw;
-	}
-	
-	/// @function setRawModelData(model);
-	/// @description Set raw model data
-	
-	/// @param {Id.Buffer} __model_raw
-	
-	setRawModelData = function(__model_raw) {
-		if (is_undefined(__model_raw)) return;
-		if (buffer_exists(self._model_data_raw)) then buffer_delete(self._model_data_raw);
-		self._model_data_raw = __model_raw;
-	}
-	
 	/// @function createModelData(model);
 	/// @description Get data of model
 	
@@ -118,26 +97,10 @@ function Model() constructor {
 				break;
 		}
 		
-		updateModelData(__temp_model_data);
-	}
-	
-	/// @function updateModelData(model);
-	/// @description Update the raw model data
-	
-	/// @params {Id.Buffer} __model
-	
-	updateModelData = function(__model) {
-		if (is_undefined(__model) || !buffer_exists(__model)) return;
-		setRawModelData(__model);
-	}
-	
-	/// @function createModelVertex(model);
-	/// @description Apply the given model data to the final model data properties
-	
-	createModelVertex = function() {
-		// Create a new vertex buffer from the raw material
-		var __model_data = self._model_data_raw, __new_v_buffer = vertex_create_buffer_from_buffer(__model_data, global.vformat);
-		setModelData(__new_v_buffer);
+		var __model_buffer = vertex_create_buffer_from_buffer(__temp_model_data, global.vformat);
+		buffer_delete(__temp_model_data);
+		
+		setModelData(__model_buffer);
 	}
 	
 	/// @function drawModelVertex();
@@ -200,7 +163,7 @@ function Model() constructor {
 	/// @param {real} __z_size
 	
 	setSize = function(__x_size, __y_size, __z_size) {
-		var __rotation = getRotation(), __model_buffer = self._model_data_raw;
+		var __rotation = getRotation(), __model_buffer = self._model_data;
 		if (is_undefined(__model_buffer)) return;
 		
 		var __size = [
@@ -209,10 +172,9 @@ function Model() constructor {
 			__z_size / self._size[2]
 		];
 		
-		var __model_buffer_size = buffer_get_size(__model_buffer);
-		var __temp_buffer = buffer_create(__model_buffer_size, buffer_fixed, 1);
-		buffer_copy(__model_buffer, 0, __model_buffer_size, __temp_buffer, 0);
-			
+		var __temp_buffer = buffer_create_from_vertex_buffer(__model_buffer, buffer_fixed, 1);
+		
+		var __model_buffer_size = buffer_get_size(__temp_buffer);
 		// Rewrite the x-, y-, and z-sizing data of all vertices (change positions)
 		for (var __i = 0; __i < __model_buffer_size; __i += 36) {
 			var __xx = buffer_peek(__temp_buffer, __i + 0, buffer_f32);
@@ -227,8 +189,11 @@ function Model() constructor {
 		}
 		
 		self._size = [__x_size, __y_size, __z_size];
+		
+		__model_buffer = vertex_create_buffer_from_buffer(__temp_buffer, global.vformat);
+		buffer_delete(__temp_buffer);
 
-		updateModelData(__temp_buffer);
+		setModelData(__model_buffer);
 	}
 	
 	/// @function getTransform();
@@ -333,11 +298,8 @@ function Model() constructor {
 	/// @description Apply texture map to the model
 	
 	applyTextureMap = function() {
-		var __model_buffer = self._model_data_raw, __tex_map = self._model_texture_map;
+		var __model_buffer = self._model_data, __tex_map = self._model_texture_map;
 		if (is_undefined(__model_buffer) || is_undefined(__tex_map)) then return;
-		
-		var __temp_buffer = buffer_create(buffer_get_size(__model_buffer), buffer_fixed, 1);
-		buffer_copy(__model_buffer, 0, buffer_get_size(__model_buffer), __temp_buffer, 0);
 		
 		// Create uv data map from texture map
 		var __uv_data = [];
@@ -356,9 +318,11 @@ function Model() constructor {
 				]
 			);
 		}
+		
+		var __temp_buffer =  buffer_create_from_vertex_buffer(__model_buffer, buffer_fixed, 1);
 			
 		// Rewrite the uv data of all vertices
-		var __model_buffer_size = buffer_get_size(__model_buffer);
+		var __model_buffer_size = buffer_get_size(__temp_buffer);
 		for (var __vt = 0; __vt < __model_buffer_size; __vt += 108) {
 			var __current_index = (__vt <= 0) ? 0 :  __vt / 108, __current_triangle = [];
 			if (__current_index > array_length(__uv_data)-1) {
@@ -372,12 +336,15 @@ function Model() constructor {
 				var __offset =  __vt + 36 * __vp;
 				if (__offset > __model_buffer_size) break;
 				var __u = __current_triangle[__vp][0], __v = __current_triangle[__vp][1];
-				buffer_poke(__model_buffer, __offset + 24, buffer_f32, __u);
-				buffer_poke(__model_buffer, __offset + 28, buffer_f32, __v);
+				buffer_poke(__temp_buffer, __offset + 24, buffer_f32, __u);
+				buffer_poke(__temp_buffer, __offset + 28, buffer_f32, __v);
 			}
 		}
+		
+		__model_buffer = vertex_create_buffer_from_buffer(__temp_buffer, global.vformat);
+		buffer_delete(__temp_buffer);
 
-		updateModelData(__temp_buffer);
+		setModelData(__model_buffer);
 	}
 	
 	// This has to be set here, otherwise it will cause an error because of the missing existance of the function
@@ -393,21 +360,10 @@ function Model() constructor {
 		}
 	}
 	
-	/// @function clearBuffers();
-	/// @description Clear all buffers which are currently used by this class
-	
-	clearBuffers = function() {
-		var __model = self._model_data_raw;
-		if (!is_undefined(__model) && buffer_exists(__model)) {
-			buffer_delete(__model);
-		}
-	}
-	
 	/// @function clearAllBuffers();
 	/// @description Clear any and every buffer which is currently used by this class
 	
 	clearAllBuffers = function() {
 		clearVertexBuffers();
-		clearBuffers();
 	}
 }
