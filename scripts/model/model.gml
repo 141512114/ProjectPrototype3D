@@ -344,23 +344,37 @@ function Model() constructor {
 		for (var __i = 0; __i <= array_length(__tex_map)-1; __i++) {
 			var __current_face = __tex_map[__i];
 			array_push(__uv_data,
-				[__current_face[0], __current_face[3]],
-				[__current_face[0], __current_face[1]],
-				[__current_face[2], __current_face[3]],
-				[__current_face[2], __current_face[1]],
-				[__current_face[2], __current_face[3]],
-				[__current_face[0], __current_face[1]]
+				[
+					[__current_face[0], __current_face[3]],
+					[__current_face[0], __current_face[1]],
+					[__current_face[2], __current_face[3]]
+				],
+				[
+					[__current_face[2], __current_face[1]],
+					[__current_face[2], __current_face[3]],
+					[__current_face[0], __current_face[1]]
+				]
 			);
 		}
 			
 		// Rewrite the uv data of all vertices
-		var __model_buffer_size = buffer_get_size(__temp_buffer);
-		for (var __f = 0; __f <= array_length(__uv_data)-1; __f++) {
-			var __offset =  36 * __f;
-			if (__offset > __model_buffer_size) break;
-			var __u = __uv_data[__f][0], __v = __uv_data[__f][1];
-			buffer_poke(__temp_buffer, __offset + 24, buffer_f32, __u);
-			buffer_poke(__temp_buffer, __offset + 28, buffer_f32, __v);
+		var __model_buffer_size = buffer_get_size(__model_buffer);
+		for (var __vt = 0; __vt < __model_buffer_size; __vt += 108) {
+			var __current_index = (__vt <= 0) ? 0 :  __vt / 108, __current_triangle = [];
+			if (__current_index > array_length(__uv_data)-1) {
+				var __modulo = 	(__current_index-array_length(__uv_data)) % 2;
+				var __prev_index = (array_length(__uv_data)-1) - (1 - __modulo);
+				__current_triangle = __uv_data[__prev_index];
+			} else {
+				__current_triangle = __uv_data[__current_index];
+			}
+			for (var __vp = 0; __vp <= array_length(__current_triangle)-1; __vp++) {
+				var __offset =  __vt + 36 * __vp;
+				if (__offset > __model_buffer_size) break;
+				var __u = __current_triangle[__vp][0], __v = __current_triangle[__vp][1];
+				buffer_poke(__model_buffer, __offset + 24, buffer_f32, __u);
+				buffer_poke(__model_buffer, __offset + 28, buffer_f32, __v);
+			}
 		}
 
 		updateModelData(__temp_buffer);

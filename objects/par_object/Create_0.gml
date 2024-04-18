@@ -12,5 +12,5 @@ model_class = new Model();
 model_class.setParentId(self);
 model_class.createModelData(SQUARE);
 model_class.setPosition(DEFAULT_CUBE_SIZE/2, DEFAULT_CUBE_SIZE/2);
-model_class.setTexture(spr_six_sides_test);
+model_class.setTexture(spr_none);
 model_class.createModelVertex();
