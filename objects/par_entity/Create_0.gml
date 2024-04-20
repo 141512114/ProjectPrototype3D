@@ -13,12 +13,11 @@ entity_class.setParentId(self);
 
 // Create model class
 model_class = new Model();
-// feather ignore all
+// feather ignore GM1041
 model_class.setParentId(self);
-model_class.clearVertexBuffers();
 model_class.createModelData(SPRITE);
 model_class.setPosition(DEFAULT_CUBE_SIZE/2, DEFAULT_CUBE_SIZE/2);
-// feather enable all
+vertex_model = model_class.createModelVertex();
 
 // Entity settings
 look_at = o_player;

@@ -2,4 +2,4 @@
 
 draw_set_color(c_white);
 
-model_class.drawModelVertex();
+model_class.drawModelVertex(vertex_model);

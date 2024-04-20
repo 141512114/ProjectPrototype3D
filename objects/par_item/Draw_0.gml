@@ -4,6 +4,6 @@ draw_set_color(c_white);
 
 gpu_set_cullmode(cull_noculling);
 
-model_class.drawModelVertex();
+model_class.drawModelVertex(vertex_model);
 
 gpu_set_cullmode(cull_counterclockwise);

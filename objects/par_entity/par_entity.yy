@@ -14,7 +14,10 @@
     "name":"entities",
     "path":"folders/Objects/entities.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"par_draw",
+    "path":"objects/par_draw/par_draw.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -37,5 +40,5 @@
     "name":"spr_collision",
     "path":"sprites/spr_collision/spr_collision.yy",
   },
-  "visible":false,
+  "visible":true,
 }

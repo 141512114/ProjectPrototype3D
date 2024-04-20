@@ -142,8 +142,8 @@ function vertex_create_sprite(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CU
 function vertex_create_crossed_sprite(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CUBE_SIZE, 0, DEFAULT_CUBE_SIZE], __tex_map = [], __color = c_white, __alpha = 1) {
 	// Create crossed sprite plane
 	var __buffer_shape_crossed_planes = [
-		buffer_shape_plane(__xx, __yy, __zz, __size, [0, 45, 0], __tex_map[0], __color, __alpha),
-		buffer_shape_plane(__xx, __yy, __zz, __size, [0, -45, 0], __tex_map[0], __color, __alpha)
+		buffer_shape_plane(__xx, __yy, __zz, __size, [0, 0, 45], __tex_map[0], __color, __alpha),
+		buffer_shape_plane(__xx, __yy, __zz, __size, [0, 0, -45], __tex_map[0], __color, __alpha)
 	];
 	
 	var __buffer_size_bytes = buffer_get_size(__buffer_shape_crossed_planes[0]);
