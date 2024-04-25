@@ -203,10 +203,12 @@ function Entity() constructor {
 		var __len_x = 0, __len_y = 0;
 		__len_x = round(lengthdir_x(__len, __dir));
 		__len_y = round(lengthdir_y(__len, __dir));
+		
+		var __can_collide = [par_object, par_entity];
 
 		with (__parent) {
-			if (place_meeting(x+__len_x, y+__len_y, [par_object, par_entity])) {
-				while (!place_meeting(x+sign(__len_x), y+sign(__len_y), [par_object, par_entity])) {
+			if (place_meeting(x+__len_x, y+__len_y, __can_collide)) {
+				while (!place_meeting(x+sign(__len_x), y+sign(__len_y), __can_collide)) {
 					x += sign(__len_x);
 					y += sign(__len_y);
 				}

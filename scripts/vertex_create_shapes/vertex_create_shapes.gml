@@ -99,11 +99,11 @@ function buffer_shape_plane(
 		// Transform normals and normalize them too
 		var __new_normals = matrix_transform_vertex(__transformation_matrix, __pnx, __pny, __pnz);
 		var __normal_magnitude = point_distance_3d(0, 0, 0, __new_normals[0], __new_normals[1], __new_normals[2]);
-		__new_normals[0] /= __normal_magnitude;
-		__new_normals[1] /= __normal_magnitude;
-		__new_normals[2] /= __normal_magnitude;
+		__new_normals[0] = clamp(__new_normals[0] /__normal_magnitude, -1, 1);
+		__new_normals[1] = clamp(__new_normals[1] /__normal_magnitude, -1, 1);
+		__new_normals[2] = clamp(__new_normals[2] /__normal_magnitude, -1, 1);
 		// Create the (vertex) point and store it in the buffer
-		buffer_create_point(__temp_buffer, __new_position[0], __new_position[1], __new_position[2], __new_normals[0], __new_normals[1], __new_normals[2], __pu, __pv, __color, __alpha);
+		buffer_create_point(__temp_buffer, __new_position[0], __new_position[1], __new_position[2], round(__new_normals[0]), round(__new_normals[1]), round(__new_normals[2]), __pu, __pv, __color, __alpha);
 	}
 	
 	return __temp_buffer;
