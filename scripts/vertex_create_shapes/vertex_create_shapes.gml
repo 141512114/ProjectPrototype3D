@@ -194,12 +194,12 @@ function vertex_create_cube(__xx = 0, __yy = 0, __zz = 0, __size = [DEFAULT_CUBE
 	
 	// Create cube shapw
 	var __buffer_shape_cube = [
-		buffer_shape_plane(__xx,				__yy-__size[0]/2,	__zz,				__size, [0, 0, 0],		__face_front, __color, __alpha),
-		buffer_shape_plane(__xx,				__yy-__size[0]/2,	__zz,				__size, [0, 0, 90],		__face_right, __color, __alpha),
-		buffer_shape_plane(__xx,				__yy-__size[0]/2,	__zz,				__size, [0, 0, 180],	__face_back, __color, __alpha),
-		buffer_shape_plane(__xx,				__yy-__size[0]/2,	__zz,				__size, [0, 0, -90],	__face_left, __color, __alpha),
-		buffer_shape_plane(__xx,				__yy-__size[0],		__zz-__size[0]/2,	__size, [90, 0, 0],		__face_top, __color, __alpha),
-		buffer_shape_plane(__xx,				__yy,				__zz-__size[0]/2,	__size, [270, 0, 0],	__face_bottom, __color, __alpha)
+		buffer_shape_plane(__xx, __yy-__size[0]/2,	__zz,				__size, [0, 0, 0],		__face_front, __color, __alpha),
+		buffer_shape_plane(__xx, __yy-__size[0]/2,	__zz,				__size, [0, 0, 90],		__face_right, __color, __alpha),
+		buffer_shape_plane(__xx, __yy-__size[0]/2,	__zz,				__size, [0, 0, 180],	__face_back, __color, __alpha),
+		buffer_shape_plane(__xx, __yy-__size[0]/2,	__zz,				__size, [0, 0, -90],	__face_left, __color, __alpha),
+		buffer_shape_plane(__xx, __yy-__size[0],	__zz-__size[0]/2,	__size, [90, 0, 0],		__face_top, __color, __alpha),
+		buffer_shape_plane(__xx, __yy,				__zz-__size[0]/2,	__size, [270, 0, 0],	__face_bottom, __color, __alpha)
 	];
 	
 	var __buffer_size_bytes = buffer_get_size(__buffer_shape_cube[0]);

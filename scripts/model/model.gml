@@ -164,7 +164,7 @@ function Model() constructor {
 	}
 	
 	/// @function setSize(width, length, height);
-	/// @description Set size of ingame model
+	/// @description Set size of ingame model (in pixels)
 	
 	/// @param {real} __x_size
 	/// @param {real} __y_size
@@ -180,6 +180,8 @@ function Model() constructor {
 			__z_size / self._size[2]
 		];
 		
+		var __transform_matrix = matrix_build(0, 0, 0, 0, 0, 0, __size[0], __size[1], __size[2]);
+		
 		var __model_buffer_size = buffer_get_size(__model_buffer);
 		var __temp_buffer = buffer_create(__model_buffer_size, buffer_fixed, 1);
 		buffer_copy(__model_buffer, 0, __model_buffer_size, __temp_buffer, 0);
@@ -193,27 +195,11 @@ function Model() constructor {
 				var __y = buffer_peek(__temp_buffer, __current_offset + 4, buffer_f32);
 				var __z = buffer_peek(__temp_buffer, __current_offset + 8, buffer_f32);
 				
-				if (__current_offset + 36 < 108) {
-					var __x2 = buffer_peek(__temp_buffer, __current_offset + 36 + 0, buffer_f32);
-					var __y2 = buffer_peek(__temp_buffer, __current_offset + 36 + 4, buffer_f32);
-					var __z2 = buffer_peek(__temp_buffer, __current_offset + 36 + 8, buffer_f32);
-					
-					var __prev_size = [
-						__x2 - __x,
-						__y2 - __y,
-						__z2 - __z
-					];
-					
-					var __new_size = matrix_build(__prev_size[0], __prev_size[1], __prev_size[2], 0, 0, 0, __size[0], __size[1], __size[2]);
-					
-					buffer_poke(__temp_buffer, __current_offset + 0, buffer_f32, (__x - __prev_size[0]) + __new_size[0]); // X
-					buffer_poke(__temp_buffer, __current_offset + 4, buffer_f32, (__y - __prev_size[1]) + __new_size[1]); // Y
-					buffer_poke(__temp_buffer, __current_offset + 8, buffer_f32, (__z - __prev_size[2]) + __new_size[2]); // Z
-					
-					buffer_poke(__temp_buffer, __current_offset + 36 + 0, buffer_f32, (__x2 - __prev_size[0]) + __new_size[0]); // X2
-					buffer_poke(__temp_buffer, __current_offset + 36 + 4, buffer_f32, (__y2 - __prev_size[1]) + __new_size[1]); // Y2
-					buffer_poke(__temp_buffer, __current_offset + 36 + 8, buffer_f32, (__z2 - __prev_size[2]) + __new_size[2]); // Z2
-				}
+				var __new_vp_pos = matrix_transform_vertex(__transform_matrix, __x, __y, __z);
+				
+				buffer_poke(__temp_buffer, __current_offset + 0, buffer_f32, __new_vp_pos[0]); // X
+				buffer_poke(__temp_buffer, __current_offset + 4, buffer_f32, __new_vp_pos[1]); // Y
+				buffer_poke(__temp_buffer, __current_offset + 8, buffer_f32, __new_vp_pos[2]); // Z
 			}
 		}
 		
