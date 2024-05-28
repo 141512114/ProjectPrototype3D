@@ -1,5 +1,7 @@
 /// @description Draw debug UI
 
+/*
+
 var __look_dir = player_class.getEntityViewDirection();
 
 draw_set_color(c_white);
@@ -29,3 +31,5 @@ for(var __i = 0; __i < array_length(__to_draw); __i++) {
 }
 
 delete __debug_colors;
+
+*/

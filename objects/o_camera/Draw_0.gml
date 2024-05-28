@@ -3,7 +3,7 @@
 // Reset screen so it doesn't get filled with the ground getting "duplicated"
 draw_clear(c_black);
 
-show_debug_overlay(true);
+// show_debug_overlay(true);
 
 // Make camera 3d
 var __view_mat = matrix_build_lookat(xfrom, yfrom, zfrom, xto, yto, zto, 0, 0, 1);
