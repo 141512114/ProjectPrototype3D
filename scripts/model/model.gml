@@ -3,86 +3,86 @@
 
 function Model() constructor {
 	self._parent			= undefined;
-	
+
 	self._model_type		= undefined;
 	self._model_data		= undefined;
 	self._model_texture		= spr_none;
 	self._model_texture_map	= undefined;
-	
+
 	self._x					= 0;
 	self._y					= 0;
 	self._z					= 0;
-	
+
 	self._size				= [DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE, DEFAULT_CUBE_SIZE];
 	self._rotation			= [0, 0, 0];
 	self._transform			= [1, 1, 1];
-	
+
 	/// @function getParentId();
 	/// @description Get parent id of ingame model. The parent is the host of this model class
-	
+
 	/// @returns {Any}
-	
+
 	getParentId = function() {
 		return self._parent;
 	}
-	
+
 	/// @function setParentId(id);
 	/// @description Set parent (object index or id) of ingame model
-	
+
 	/// @param {Asset.GMObject|any} __parent
-	
+
 	setParentId = function(__parent) {
 		self._parent = __parent;
 	}
-	
+
 	/// @function getModelType();
 	/// @description Get type of model
-	
+
 	/// @returns {real}
-	
+
 	getModelType = function() {
 		return self._model_type;
 	}
-	
+
 	/// @function setModelType();
 	/// @description Set type of model
-	
+
 	/// @params {real} __model_type
-	
+
 	setModelType = function(__model_type) {
 		self._model_type = typeof(__model_type) == "number" ? __model_type : MODEL;
 	}
-	
+
 	/// @function getModelData();
 	/// @description Get data of model
-	
+
 	/// @returns {Id.Buffer}
-	
+
 	getModelData = function() {
 		return self._model_data;
 	}
-	
+
 	/// @function setModelData(model);
 	/// @description Set model data
-	
+
 	/// @param {Id.Buffer} __model_data
-	
+
 	setModelData = function(__model_data) {
 		if (is_undefined(__model_data)) return;
 		if (buffer_exists(self._model_data)) then buffer_delete(self._model_data);
 		self._model_data = __model_data;
 	}
-	
+
 	/// @function createModelData(model);
 	/// @description Get data of model
-	
+
 	/// @params {Any} __model_type
-	
+
 	createModelData = function(__model_type) {
 		setModelType(__model_type);
 
 		var __temp_x = 0, __temp_y = 0, __temp_z = 0, __temp_size = getSize(), __temp_tex_map = self._model_texture_map;
-		
+
 		var __temp_buffer; switch (self._model_type) {
 			case SQUARE:
 				__temp_buffer =	vertex_create_cube(__temp_x, __temp_y, __temp_z, __temp_size, __temp_tex_map);
@@ -94,31 +94,31 @@ function Model() constructor {
 				__temp_buffer =	vertex_create_crossed_sprite(__temp_x, __temp_y, __temp_z, __temp_size, __temp_tex_map);
 				break;
 		}
-		
+
 		setModelData(__temp_buffer);
 		applyTextureMap();
 	}
-	
+
 	/// @function createModelVertex();
 	/// @description Create the vertex buffer for displaying the model data ingame
-	
+
 	/// @returns {Id.VertexBuffer|undefined}
-	
+
 	createModelVertex = function() {
 		if (is_undefined(self._model_data) || !buffer_exists(self._model_data)) return;
 		var __v_buffer = vertex_create_buffer_from_buffer(self._model_data, global.vformat);
 		vertex_freeze(__v_buffer);
 		return __v_buffer;
 	}
-	
+
 	/// @function drawModelVertex();
 	/// @description Draw the vertex buffer to the screen. Or rather: submit it to the queue
-	
+
 	drawModelVertex = function(__v_buffer) {
 		if (is_undefined(__v_buffer) || !vertex_buffer_exists(__v_buffer)) return;
 		var __parent = getParentId(), __position = getPosition(), __rotation = getRotation(), __transform = getTransform();
 		var __model_x = __parent.x+__position[0], __model_y = __parent.y+__position[1], __model_z = __parent.z+__position[2];
-		
+
 		matrix_set(
 			matrix_world,
 			matrix_build(__model_x, __model_y, __model_z, __rotation[0], __rotation[1], __rotation[2], __transform[0], __transform[1], __transform[2])
@@ -126,28 +126,28 @@ function Model() constructor {
 		vertex_submit(__v_buffer, pr_trianglelist, getTexture());
 		matrix_set(matrix_world, matrix_build_identity());
 	}
-	
+
 	/// @function removeJunkFaces();
 	/// @description Remove unnecessary faces of the (best would be static) model, which the player won't see anyways
-	
+
 	removeJunkFaces = function() {
 		var __parent = getParentId(), __model_buffer = self._model_data;
 		// Make sure there is an object and a model to work with
 		if ((is_undefined(__parent) || !instance_exists(__parent)) || is_undefined(__model_buffer)) return undefined;
-	
+
 		// Check where the (static) object might hit another (static) object
 		var __lx = false, __rx = false, __fy = false, __by = false, __s_obj = o_wall;
-		
+
 		with (__parent) {
 			__lx = place_meeting(x-1, y, __s_obj);
 			__rx = place_meeting(x+1, y, __s_obj);
 			__fy = place_meeting(x, y+1, __s_obj);
 			__by = place_meeting(x, y-1, __s_obj);
 		}
-		
+
 		if (__lx || __rx || __fy || __by) {
 			var __model_ds_list = ds_list_create();
-			
+
 			var __model_buffer_size = buffer_get_size(__model_buffer);
 			// Load every valid value of every vertex based on collisions with closeby blocks
 			for (var __i = 0; __i < __model_buffer_size; __i += 36) {
@@ -159,228 +159,228 @@ function Model() constructor {
 					var __xx = buffer_peek(__model_buffer, __i + 0, buffer_f32);
 					var __yy = buffer_peek(__model_buffer, __i + 4, buffer_f32);
 					var __zz = buffer_peek(__model_buffer, __i + 8, buffer_f32);
-					
+
 					var __u = buffer_peek(__model_buffer, __i + 24, buffer_f32);
 					var __v = buffer_peek(__model_buffer, __i + 28, buffer_f32);
-			
+
 					var __int_r = buffer_peek(__model_buffer, __i + 32, buffer_u8);
 					var __int_g = buffer_peek(__model_buffer, __i + 33, buffer_u8);
 					var __int_b = buffer_peek(__model_buffer, __i + 34, buffer_u8);
 					var __alpha = buffer_peek(__model_buffer, __i + 35, buffer_u8);
-					
+
 					// Save these extracted values into a seperated ds_list
 					ds_list_add(__model_ds_list, __xx, __yy, __zz, __nx, __ny, __nz, __u, __v, __int_r, __int_g, __int_b, __alpha);
 				}
 			}
-			
+
 			// Create a new buffer for our "new" model
 			var __buffer_size = 36 * ds_list_size(__model_ds_list);
 			var __temp_buffer = buffer_create(__buffer_size, buffer_fixed, 1);
-		
+
 			// Use the stored values in the ds_list and build a new model
 			for (var __i=0; __i<ds_list_size(__model_ds_list)-1; __i+=12) {
 				var __xx = ds_list_find_value(__model_ds_list, __i + 0);
 				var __yy = ds_list_find_value(__model_ds_list, __i + 1);
 				var __zz = ds_list_find_value(__model_ds_list, __i + 2);
-		
+
 				var __nx = ds_list_find_value(__model_ds_list, __i + 3);
 				var __ny = ds_list_find_value(__model_ds_list, __i + 4);
 				var __nz = ds_list_find_value(__model_ds_list, __i + 5);
-		
+
 				var __u = ds_list_find_value(__model_ds_list, __i + 6);
 				var __v = ds_list_find_value(__model_ds_list, __i + 7);
-			
+
 				var __int_r = ds_list_find_value(__model_ds_list, __i + 8);
 				var __int_g = ds_list_find_value(__model_ds_list, __i + 9);
 				var __int_b = ds_list_find_value(__model_ds_list, __i + 10);
 				var __alpha = ds_list_find_value(__model_ds_list, __i + 11);
-			
+
 				buffer_write(__temp_buffer, buffer_f32, __xx);
 				buffer_write(__temp_buffer, buffer_f32, __yy);
 				buffer_write(__temp_buffer, buffer_f32, __zz);
-			
+
 				buffer_write(__temp_buffer, buffer_f32, __nx);
 				buffer_write(__temp_buffer, buffer_f32, __ny);
 				buffer_write(__temp_buffer, buffer_f32, __nz);
-			
+
 				buffer_write(__temp_buffer, buffer_f32, __u);
 				buffer_write(__temp_buffer, buffer_f32, __v);
-			
+
 				buffer_write(__temp_buffer, buffer_u8, __int_r);
 				buffer_write(__temp_buffer, buffer_u8, __int_g);
 				buffer_write(__temp_buffer, buffer_u8, __int_b);
 				buffer_write(__temp_buffer, buffer_u8, __alpha);
 			}
-		
+
 			ds_list_destroy(__model_ds_list);
 			setModelData(__temp_buffer);
 		}
 	}
-	
+
 	/// @function getPosition();
 	/// @description Get position properties of ingame model
-	
+
 	getPosition = function() {
 		return [self._x, self._y, self._z];
 	}
-	
+
 	/// @function setPosition(x, y, z);
 	/// @description Set position properties of ingame model
-	
+
 	/// @param {real} __x
 	/// @param {real} __y
 	/// @param {real} __z
-	
+
 	setPosition = function(__x = 0, __y = 0, __z = 0) {
 		self._x = __x;
 		self._y = __y;
 		self._z = __z;
 	}
-	
+
 	/// @function getSize();
 	/// @description Get size of ingame model
-	
+
 	/// @returns {Array<Real>}
-	
+
 	getSize = function() {
 		return self._size;
 	}
-	
+
 	/// @function setSize(width, length, height);
 	/// @description Set size of ingame model (in pixels)
-	
+
 	/// @param {real} __x_size
 	/// @param {real} __y_size
 	/// @param {real} __z_size
-	
+
 	setSize = function(__x_size, __y_size, __z_size) {
 		var __model_buffer = self._model_data;
 		if (is_undefined(__model_buffer) || !buffer_exists(__model_buffer)) return;
-		
+
 		var __size = [
 			__x_size / self._size[0],
 			__y_size / self._size[1],
 			__z_size / self._size[2]
 		];
-		
+
 		var __transform_matrix = matrix_build(0, 0, 0, 0, 0, 0, __size[0], __size[1], __size[2]);
-		
+
 		var __model_buffer_size = buffer_get_size(__model_buffer);
 		var __temp_buffer = buffer_create(__model_buffer_size, buffer_fixed, 1);
 		buffer_copy(__model_buffer, 0, __model_buffer_size, __temp_buffer, 0);
-		
+
 		// Rewrite the x-, y-, and z-sizing data of all vertices (change positions)
 		for (var __vt = 0; __vt < __model_buffer_size; __vt += 108) {
 			for (var __vp = 0; __vp < 108; __vp += 36) {
 				var __current_offset = __vt + __vp;
-				
+
 				var __x = buffer_peek(__temp_buffer, __current_offset + 0, buffer_f32);
 				var __y = buffer_peek(__temp_buffer, __current_offset + 4, buffer_f32);
 				var __z = buffer_peek(__temp_buffer, __current_offset + 8, buffer_f32);
-				
+
 				var __new_vp_pos = matrix_transform_vertex(__transform_matrix, __x, __y, __z);
-				
+
 				buffer_poke(__temp_buffer, __current_offset + 0, buffer_f32, __new_vp_pos[0]); // X
 				buffer_poke(__temp_buffer, __current_offset + 4, buffer_f32, __new_vp_pos[1]); // Y
 				buffer_poke(__temp_buffer, __current_offset + 8, buffer_f32, __new_vp_pos[2]); // Z
 			}
 		}
-		
+
 		self._size = [__x_size, __y_size, __z_size];
 
 		setModelData(__temp_buffer);
 	}
-	
+
 	/// @function getTransform();
 	/// @description Get transform properties of ingame model
-	
+
 	/// @returns {Array<Real>}
-	
+
 	getTransform = function() {
 		return self._transform;
 	}
-	
+
 	/// @function setTransform(x, y, z);
 	/// @description Set transform properties of ingame model
-	
+
 	/// @param {real} __x_transform
 	/// @param {real} __y_transform
 	/// @param {real} __z_transform
-	
+
 	setTransform = function(__x_transform, __y_transform, __z_transform) {
 		self._transform = [__x_transform, __y_transform, __z_transform];
 	}
-	
+
 	/// @function getRotation();
 	/// @description Get rotation properties of ingame model
-	
+
 	/// @returns {Array<Real>}
-	
+
 	getRotation = function() {
 		return self._rotation;
 	}
-	
+
 	/// @function setRotation(x, y, z);
 	/// @description Set rotation properties of ingame model
-	
+
 	/// @param {real} __x_rotation
 	/// @param {real} __y_rotation
 	/// @param {real} __z_rotation
-	
+
 	setRotation = function(__x_rotation, __y_rotation, __z_rotation) {
 		self._rotation = [__x_rotation, __y_rotation, __z_rotation];
 	}
-	
+
 	/// @function getTexture();
 	/// @description Get the texture of ingame model
-	
+
 	/// @returns {real|Pointer.Texture}
-	
+
 	getTexture = function() {
 		return sprite_get_texture(self._model_texture, 0);
 	}
-	
+
 	/// @function getSprite();
 	/// @description Get the sprite of ingame model
-	
+
 	/// @returns {Asset.GMSprite}
-	
+
 	getSprite = function() {
 		return self._model_texture;
 	}
-	
+
 	/// @function setTexture(texture);
 	/// @description Set the texture of ingame model
-	
+
 	/// @param {Asset.GMSprite|any} __tex
-	
+
 	setTexture = function(__tex = spr_none) {
 		self._model_texture = __tex;
 		generateTetxtureMap();
 		applyTextureMap();
 	}
-	
+
 	/// @function getTextureMap();
 	/// @description Get the texture map of ingame model
-	
+
 	/// @returns {Array<Array<Real>>}
-	
+
 	getTextureMap = function() {
 		return self._model_texture_map;
 	}
-	
+
 	/// @function setTetxtureMap(tex_map);
 	/// @description Set the texture map of ingame model
-	
+
 	/// @param {Array<Array<Real>>} __tex_map
-	
+
 	setTetxtureMap = function(__tex_map = []) {
 		self._model_texture_map = __tex_map;
 	}
-	
+
 	/// @function generateTetxtureMap();
 	/// @description Generate texture map of ingame model
-	
+
 	generateTetxtureMap = function() {
 		var __sprite = self._model_texture, __new_tex_map = [];
 		if (is_undefined(__sprite) || !sprite_exists(__sprite)) return;
@@ -389,14 +389,14 @@ function Model() constructor {
 		}
 		setTetxtureMap(__new_tex_map);
 	}
-	
+
 	/// @function applyTextureMap();
 	/// @description Apply texture map to the model
-	
+
 	applyTextureMap = function() {
 		var __model_buffer = self._model_data, __tex_map = self._model_texture_map;
 		if (is_undefined(__model_buffer) || !buffer_exists(__model_buffer)) then return;
-		
+
 		// Create uv data map from texture map
 		var __uv_data = []; for (var __i = 0; __i <= array_length(__tex_map)-1; __i++) {
 			var __current_face = __tex_map[__i];
@@ -413,13 +413,13 @@ function Model() constructor {
 				]
 			);
 		}
-		
+
 		if (array_length(__uv_data) <= 0) return;
-		
+
 		var __model_buffer_size = buffer_get_size(__model_buffer);
 		var __temp_buffer = buffer_create(__model_buffer_size, buffer_fixed, 1);
 		buffer_copy(__model_buffer, 0, __model_buffer_size, __temp_buffer, 0);
-			
+
 		// Rewrite the uv data of all vertices
 		for (var __vt = 0; __vt < __model_buffer_size; __vt += 108) {
 			var __current_index = (__vt <= 0) ? 0 :  __vt / 108, __current_triangle = [];
@@ -438,16 +438,16 @@ function Model() constructor {
 				buffer_poke(__temp_buffer, __offset + 28, buffer_f32, __v);
 			}
 		}
-		
+
 		setModelData(__temp_buffer);
 	}
-	
+
 	// This has to be set here, otherwise it will cause an error because of the missing existance of the function
 	setTexture();
-	
+
 	/// @function clearBuffers();
 	/// @description Clear any and every buffer which is currently used by this class
-	
+
 	clearBuffers = function() {
 		var __model = self._model_data;
 		if (!is_undefined(__model) && buffer_exists(__model)) then buffer_delete(__model);

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"vertex_create_shapes",
   "isCompatibility":false,
   "isDnD":false,
