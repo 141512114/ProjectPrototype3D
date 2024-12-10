@@ -1,12 +1,11 @@
 /// @function Model()
 /// @description Model class
 
-function Model() constructor {
+function Model(__texture = spr_none) constructor {
 	self._parent			= undefined;
 
-	self._model_type		= undefined;
 	self._model_data		= undefined;
-	self._model_texture		= spr_none;
+	self._model_texture		= __texture;
 	self._model_texture_map	= undefined;
 
 	self._x					= 0;
@@ -35,24 +34,6 @@ function Model() constructor {
 		self._parent = __parent;
 	}
 
-	/// @function getModelType();
-	/// @description Get type of model
-
-	/// @returns {real}
-
-	getModelType = function() {
-		return self._model_type;
-	}
-
-	/// @function setModelType();
-	/// @description Set type of model
-
-	/// @params {real} __model_type
-
-	setModelType = function(__model_type) {
-		self._model_type = typeof(__model_type) == "number" ? __model_type : MODEL;
-	}
-
 	/// @function getModelData();
 	/// @description Get data of model
 
@@ -71,32 +52,6 @@ function Model() constructor {
 		if (is_undefined(__model_data)) return;
 		if (buffer_exists(self._model_data)) then buffer_delete(self._model_data);
 		self._model_data = __model_data;
-	}
-
-	/// @function createModelData(model);
-	/// @description Get data of model
-
-	/// @params {Any} __model_type
-
-	createModelData = function(__model_type) {
-		setModelType(__model_type);
-
-		var __temp_x = 0, __temp_y = 0, __temp_z = 0, __temp_size = getSize(), __temp_tex_map = self._model_texture_map;
-
-		var __temp_buffer; switch (self._model_type) {
-			case SQUARE:
-				__temp_buffer =	vertex_create_cube(__temp_x, __temp_y, __temp_z, __temp_size, __temp_tex_map);
-				break;
-			case SPRITE:
-				__temp_buffer =	vertex_create_sprite(__temp_x, __temp_y, __temp_z, __temp_size, __temp_tex_map);
-				break;
-			case CROSSED_SPRITE:
-				__temp_buffer =	vertex_create_crossed_sprite(__temp_x, __temp_y, __temp_z, __temp_size, __temp_tex_map);
-				break;
-		}
-
-		setModelData(__temp_buffer);
-		applyTextureMap();
 	}
 
 	/// @function createModelVertex();
@@ -355,6 +310,7 @@ function Model() constructor {
 	/// @param {Asset.GMSprite|any} __tex
 
 	setTexture = function(__tex = spr_none) {
+		show_debug_message(string(self._model_texture) + " " + sprite_get_name(__tex));
 		self._model_texture = __tex;
 		generateTetxtureMap();
 		applyTextureMap();
@@ -390,15 +346,13 @@ function Model() constructor {
 		setTetxtureMap(__new_tex_map);
 	}
 
-	/// @function applyTextureMap();
-	/// @description Apply texture map to the model
+	/// @function createUVData();
+	/// @description Create the uv data used to apply textures to models
 
-	applyTextureMap = function() {
-		var __model_buffer = self._model_data, __tex_map = self._model_texture_map;
-		if (is_undefined(__model_buffer) || !buffer_exists(__model_buffer)) then return;
+	createUVData = function() {
+		var __uv_data = [], __tex_map = self._model_texture_map;
 
-		// Create uv data map from texture map
-		var __uv_data = []; for (var __i = 0; __i <= array_length(__tex_map)-1; __i++) {
+		for (var __i = 0; __i <= array_length(__tex_map)-1; __i++) {
 			var __current_face = __tex_map[__i];
 			array_push(__uv_data,
 				[
@@ -413,6 +367,19 @@ function Model() constructor {
 				]
 			);
 		}
+
+		return __uv_data;
+	}
+
+	/// @function applyTextureMap();
+	/// @description Apply texture map to the model
+
+	applyTextureMap = function() {
+		var __model_buffer = self._model_data;
+		if (is_undefined(__model_buffer) || !buffer_exists(__model_buffer)) then return;
+
+		// Create uv data map from texture map
+		var __uv_data = createUVData();
 
 		if (array_length(__uv_data) <= 0) return;
 
@@ -442,8 +409,6 @@ function Model() constructor {
 		setModelData(__temp_buffer);
 	}
 
-	// This has to be set here, otherwise it will cause an error because of the missing existance of the function
-	setTexture();
 
 	/// @function clearBuffers();
 	/// @description Clear any and every buffer which is currently used by this class

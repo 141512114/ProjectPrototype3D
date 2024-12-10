@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"model",
+  "%Name":"crossed_sprite",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"model",
+  "name":"crossed_sprite",
   "parent":{
     "name":"model",
     "path":"folders/Scripts/classes/model.yy",

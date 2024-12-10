@@ -1,5 +1,3 @@
-/// @description Draw model in 3 dimensions and set up the entity in its 3d environment
+/// @description Draw entity
 
-draw_set_color(c_white);
-
-model_class.drawModelVertex(vertex_model);
+draw_sprite_3d(entity_sprite, image_index, x+DEFAULT_CUBE_SIZE/2, y+DEFAULT_CUBE_SIZE/2, z, 1, 1, 0, 0, -plane_rot);

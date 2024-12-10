@@ -1,6 +1,3 @@
-/// @description Delete vertex buffer
+/// @description Delete entity struct
 
-model_class.clearBuffers();
-if (vertex_buffer_exists(vertex_model)) then vertex_delete_buffer(vertex_model);
-delete model_class;
 delete entity_class;

@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"model",
+  "%Name":"draw_sprite_3d",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"model",
+  "name":"draw_sprite_3d",
   "parent":{
-    "name":"model",
-    "path":"folders/Scripts/classes/model.yy",
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"model",
+  "%Name":"cube",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"model",
+  "name":"cube",
   "parent":{
     "name":"model",
     "path":"folders/Scripts/classes/model.yy",
