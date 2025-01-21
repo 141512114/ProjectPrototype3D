@@ -50,6 +50,7 @@
     {"name":"draw_sprite_3d","order":4,"path":"scripts/draw_sprite_3d/draw_sprite_3d.yy",},
     {"name":"instance_create","order":1,"path":"scripts/instance_create/instance_create.yy",},
     {"name":"inventoryManager","order":3,"path":"scripts/inventoryManager/inventoryManager.yy",},
+    {"name":"item_datamap","order":5,"path":"scripts/item_datamap/item_datamap.yy",},
     {"name":"item","order":2,"path":"scripts/item/item.yy",},
     {"name":"macros","order":3,"path":"scripts/macros/macros.yy",},
     {"name":"vertex_general","order":1,"path":"scripts/vertex_general/vertex_general.yy",},

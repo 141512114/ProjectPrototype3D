@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"item_datamap",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"item_datamap",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

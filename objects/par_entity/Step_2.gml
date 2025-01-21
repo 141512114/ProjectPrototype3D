@@ -4,7 +4,7 @@ var __animation_speed = 10;
 var __frame_duration = 1 / __animation_speed;
 
 frame_time += __animation_speed * delta_time;
-show_debug_message(frame_time);
+// show_debug_message(frame_time);
 
 // If enough time has passed to advance the frame
 if (frame_time >= __frame_duration) {

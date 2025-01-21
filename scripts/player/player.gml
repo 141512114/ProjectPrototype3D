@@ -2,17 +2,15 @@
 /// @description Player class
 
 function Player() : Entity() constructor {
-	/// @function pickUpItem();
-	/// @description Pick up nearby items
+	self.inst_inventory = instance_create(0, 0, 0, o_player_inventory, "General");
 
-	pickUpItem = function () {
-		var __pos = getEntityPosition();
-		var __nearby_items = ds_list_create();
-		var __num = collision_circle_list(__pos[0], __pos[1], 64, par_item, false, true, __nearby_items, false);
-		for (var __i = 0; __i < __num; ++__i) {
-			var __current_item = __nearby_items[| __i];
-		    instance_destroy(__current_item);
-		}
-		ds_list_destroy(__nearby_items);
+	/// @function pickUpItem();
+	/// @description Pick up an item
+
+	/// @param {Asset.GMObject} __item
+
+	pickUpItem = function (__item) {
+		var __inventory = self.inst_inventory.inventory_manager_class;
+		__inventory.addItemToStorage(__item.item_class.getIdentity());
 	}
 }

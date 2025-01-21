@@ -19,6 +19,3 @@ plane_rot = 0;
 // Create the camera object
 var __inst_camera = instance_create(x, y, z, o_camera, "Camera");
 __inst_camera.view_target = id;
-
-// Create the inventory object
-var __inst_inventory = instance_create(x, y, z, o_player_inventory, "General");

@@ -21,5 +21,3 @@ var __door_in_sight = instance_place(x+__look_dir_x, y+__look_dir_y, o_door);
 if (__door_in_sight) {
 	if (keyboard_check_pressed(ord("F"))) then instance_destroy(__door_in_sight);
 }
-
-if (keyboard_check_pressed(ord("E"))) then player_class.pickUpItem();
