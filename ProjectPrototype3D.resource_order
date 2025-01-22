@@ -36,6 +36,7 @@
   "ResourceOrderSettings":[
     {"name":"o_camera_controller","order":1,"path":"objects/o_camera_controller/o_camera_controller.yy",},
     {"name":"o_flower","order":2,"path":"objects/o_flower/o_flower.yy",},
+    {"name":"o_player_hitbox","order":4,"path":"objects/o_player_hitbox/o_player_hitbox.yy",},
     {"name":"o_player_inventory","order":3,"path":"objects/o_player_inventory/o_player_inventory.yy",},
     {"name":"o_player","order":2,"path":"objects/o_player/o_player.yy",},
     {"name":"o_software_control","order":4,"path":"objects/o_software_control/o_software_control.yy",},
@@ -60,6 +61,7 @@
     {"name":"spr_flower_placeholder","order":1,"path":"sprites/spr_flower_placeholder/spr_flower_placeholder.yy",},
     {"name":"spr_flower","order":3,"path":"sprites/spr_flower/spr_flower.yy",},
     {"name":"spr_player_collision","order":1,"path":"sprites/spr_player_collision/spr_player_collision.yy",},
+    {"name":"spr_player_hitbox","order":2,"path":"sprites/spr_player_hitbox/spr_player_hitbox.yy",},
     {"name":"spr_player_placeholder","order":2,"path":"sprites/spr_player_placeholder/spr_player_placeholder.yy",},
     {"name":"spr_six_sides_test","order":1,"path":"sprites/spr_six_sides_test/spr_six_sides_test.yy",},
     {"name":"spr_test_door","order":2,"path":"sprites/spr_test_door/spr_test_door.yy",},
