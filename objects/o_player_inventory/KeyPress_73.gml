@@ -1,3 +1,5 @@
+/// @description Open up the inventory
+
 var __inventory = inventory_manager_class.getStorage();
 
 show_debug_message("-----------------");

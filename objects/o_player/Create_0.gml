@@ -16,6 +16,6 @@ sensitivity = 17;
 look_at = -1;
 plane_rot = 0;
 
-// Create the camera object
-var __inst_camera = instance_create(x, y, z, o_camera, "Camera");
-__inst_camera.view_target = id;
+// Find the camera object and assign the player as the view target
+var __inst_camera = instance_find(o_camera, 0);
+__inst_camera.view_target = self;

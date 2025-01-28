@@ -2,6 +2,7 @@
 
 var __item_flower = ds_map_create();
 ds_map_add(__item_flower, "name", "Flower");
+ds_map_add(__item_flower, "sprite", spr_flower);
 
 #endregion
 
