@@ -8,7 +8,7 @@ function Item() constructor {
     /// @function setItemId(id);
 	/// @description Set the id of the item
 
-    /// @param {number} __id
+    /// @param {Real} __id
 
     setItemId = function(__id) {
         self.item_id = __id;
