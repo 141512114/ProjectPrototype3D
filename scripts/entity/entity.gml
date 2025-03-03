@@ -3,32 +3,32 @@
 
 function Entity() constructor {
 	self._parent			= undefined;
-	
+
 	self._max_health_points = 2;
 	self._health_points		= self._max_health_points;
 	self._look_dir			= 0;
 	self._move_speed		= 6;
-	
+
 	/// @function getParentId();
 	/// @description Get parent id of the entity
 	/// @returns {Any|Undefined}
-	
+
 	getParentId = function() {
 		return self._parent;
 	}
-	
+
 	/// @function setParentId(id);
 	/// @description Set parent (object index or id) of entity
-	
+
 	/// @param {Asset.GMObject|any} __parent
-	
+
 	setParentId = function(__parent) {
 		self._parent = __parent;
 	}
 
 	/// @function getHealthPoints();
 	/// @description Get health points of the entity
-	
+
 	/// @returns {Real}
 
 	getHealthPoints = function() {
@@ -37,7 +37,7 @@ function Entity() constructor {
 
 	/// @function getMaxHealthPoints();
 	/// @description Get the maximum health points of the entity
-	
+
 	/// @returns {Real}
 
 	getMaxHealthPoints = function() {
@@ -48,7 +48,7 @@ function Entity() constructor {
 	/// @description Set health points of the entity
 
 	/// @param {real} __hp
-	
+
 	/// @returns
 
 	setHealthPoints = function(__hp) {
@@ -59,7 +59,7 @@ function Entity() constructor {
 	/// @description Set the maximum health points of the entity
 
 	/// @param {real} __max_hp
-	
+
 	/// @returns
 
 	setMaxHealthPoints = function(__max_hp) {
@@ -68,7 +68,7 @@ function Entity() constructor {
 
 	/// @function getEntityPosition();
 	/// @description Get position properties of entity
-	
+
 	/// @returns {Array}
 
 	getEntityPosition = function() {
@@ -82,7 +82,7 @@ function Entity() constructor {
 	/// @param {real} __x
 	/// @param {real} __y
 	/// @param {real} __z
-	
+
 	/// @returns
 
 	setEntityPosition = function(__x = 0, __y = 0, __z = 0) {
@@ -97,7 +97,7 @@ function Entity() constructor {
 
 	/// @function getMoveSpeed();
 	/// @description Get movement speed of the entity
-	
+
 	/// @returns {Real}
 
 	getMoveSpeed = function() {
@@ -108,7 +108,7 @@ function Entity() constructor {
 	/// @description Set movement speed of the entity
 
 	/// @param {real} __move_speed
-	
+
 	/// @returns
 
 	setMoveSpeed = function(__move_speed) {
@@ -117,7 +117,7 @@ function Entity() constructor {
 
 	/// @function getEntityViewDirection();
 	/// @description Get view direction of entity
-	
+
 	/// @returns {Real}
 
 	getEntityViewDirection = function() {
@@ -128,7 +128,7 @@ function Entity() constructor {
 	/// @description Set view direction of entity
 
 	/// @param {real} __look_dir
-	
+
 	/// @returns
 
 	setEntityViewDirection = function(__look_dir) {
@@ -136,12 +136,23 @@ function Entity() constructor {
 		self._look_dir = __look_dir;
 	}
 
+	/// @function move(horizontal, vertical);
+	/// @description Move the entity
+
+	/// @param {real} __h_move
+	/// @param {real} __v_move
+
+	move = function(__h_move, __v_move) {
+		var __dpos = self.entityMoveSet(__h_move, __v_move);
+		self.manipulateEntityPosition(__dpos[0], __dpos[1], __dpos[2]);
+	}
+
 	/// @function entityMoveSet(horizontal, vertical);
 	/// @description Calculate entity moves
 
 	/// @param {real} __h_move
 	/// @param {real} __v_move
-	
+
 	/// @returns {Array<Real>}
 
 	entityMoveSet = function(__h_move, __v_move) {
@@ -170,7 +181,7 @@ function Entity() constructor {
 	/// @param {real} __dx
 	/// @param {real} __dy
 	/// @param {real} __len
-	
+
 	/// @returns
 
 	manipulateEntityPosition = function(__dx, __dy, __len = 0) {
@@ -192,7 +203,7 @@ function Entity() constructor {
 	/// @param {real} __dx
 	/// @param {real} __dy
 	/// @param {real} __len
-	
+
 	/// @returns {bool}
 
 	checkEntityCollision = function(__dx, __dy, __len = 0) {
@@ -203,7 +214,7 @@ function Entity() constructor {
 		var __len_x = 0, __len_y = 0;
 		__len_x = round(lengthdir_x(__len, __dir));
 		__len_y = round(lengthdir_y(__len, __dir));
-		
+
 		var __can_collide = [par_object, par_entity];
 
 		with (__parent) {
